@@ -16,12 +16,17 @@ public class Player {
 	}
 
 	public static PlayerState playerState;
-	private int hp, perception;
+	public int hp, perception, organization, dexterity, shooting;
+	private Weapon weapon;
 	
 	
-	public Player(int hp, int perception) {
+	public Player(int hp, int perception, int org, int dex, int shooting, Weapon weapon) {
 		this.playerState = PlayerState.NOT_IN_COVER;
-		this.hp = hp;
 		this.perception = perception;
+		this.organization = org;
+		this.dexterity = dex;
+		this.shooting = shooting;
+		this.hp = hp;
+		this.weapon = weapon;
 	}
 }
