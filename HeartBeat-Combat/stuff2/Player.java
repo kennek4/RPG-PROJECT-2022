@@ -12,16 +12,16 @@ public class Player {
 				return IN_COVER;
 			}
 		};
+
 		abstract PlayerState nextState();
 	}
 
 	public static PlayerState playerState;
 	public int hp, perception, organization, dexterity, shooting;
-	private Weapon weapon;
-	
-	
+	public Weapon weapon;
+
 	public Player(int hp, int perception, int org, int dex, int shooting, Weapon weapon) {
-		this.playerState = PlayerState.NOT_IN_COVER;
+		Player.playerState = PlayerState.NOT_IN_COVER;
 		this.perception = perception;
 		this.organization = org;
 		this.dexterity = dex;

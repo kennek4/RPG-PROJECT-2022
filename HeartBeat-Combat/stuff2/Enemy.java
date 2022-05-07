@@ -13,8 +13,9 @@ public class Enemy {
 				// TODO Auto-generated method stub
 				return "*Looks in your direction*";
 			}
+
 		},
-		
+
 		NOT_LOOKING {
 			@Override
 			public EnemyState nextState() {
@@ -25,14 +26,19 @@ public class Enemy {
 			String stateDialogue() {
 				return "*Looks away*";
 			}
+
 		};
+
 		abstract EnemyState nextState();
+
 		abstract String stateDialogue();
 	}
-	private int hp,dmg;
-	
-	public Enemy(int hp, int dmg) {
+
+	public int hp, dmg, dexterity;
+
+	public Enemy(int hp, int dmg, int dexterity) {
 		this.hp = hp;
 		this.dmg = dmg;
+		this.dexterity = dexterity;
 	}
 }
