@@ -19,6 +19,7 @@ public class UI implements Runnable {
     private JFrame root;
     private InputDriver inputDriver;
     private HeartBeat hb;
+    public JPanel outputBox = new JPanel();
 
     public UI(InputDriver inputDriver, HeartBeat hb) {
         this.hb = hb;
@@ -62,7 +63,6 @@ public class UI implements Runnable {
         root.add(inspectBox, c);
 
         // Output Panel
-        JPanel outputBox = new JPanel();
         outputBox.setLayout(new BoxLayout(outputBox, BoxLayout.Y_AXIS));
         outputBox.setBackground(Color.GREEN);
         outputBox.setPreferredSize(new Dimension(350, 300));
@@ -71,6 +71,13 @@ public class UI implements Runnable {
         c.gridwidth = 3;
         c.gridheight = 1;
         c.insets = new Insets(10, 25, 25, 25);
+
+        // Text boxes
+        JLabel textBoxOne = new JLabel("1");
+        JLabel textBoxTwo = new JLabel("2");
+        JLabel textBoxThree = new JLabel("3");
+        JLabel textBoxFour = new JLabel("4");
+        JLabel textBoxFive = new JLabel("5");
 
         // Buttons
         JButton btn1 = new JButton("Take Cover");
@@ -85,12 +92,15 @@ public class UI implements Runnable {
         btn3.setPreferredSize(new Dimension(200, 100));
         btn3.addActionListener(e -> hb.queuePlayerAttack());
 
-        JLabel text = new JLabel();
+        outputBox.add(textBoxOne);
+        outputBox.add(textBoxTwo);
+        outputBox.add(textBoxThree);
+        outputBox.add(textBoxFour);
+        outputBox.add(textBoxFive);
 
-        outputBox.add(btn1);
-        outputBox.add(btn2);
-        outputBox.add(btn3);
-        outputBox.add(text);
+        root.add(btn1);
+        root.add(btn2);
+        root.add(btn3);
 
         root.add(outputBox, c);
 

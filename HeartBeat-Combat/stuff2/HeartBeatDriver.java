@@ -12,6 +12,7 @@ public class HeartBeatDriver {
 		hb.inputDriver.hb = hb;
 
 		UI window = new UI(inputDriver, hb);
+		hb.ui = window;
 
 		Thread gameWindow = new Thread(window);
 		Thread hbThread = new Thread(hb);

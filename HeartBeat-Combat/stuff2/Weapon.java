@@ -3,29 +3,28 @@ package stuff2;
 public class Weapon {
 	double dmg, acc, critChance;
 	String weaponName;
-	Weapon(String weaponName, int dmg, double acc, double critChance)
-	{
+
+	Weapon(String weaponName, int dmg, double acc, double critChance) {
 		this.weaponName = weaponName;
 		this.dmg = dmg;
-		this.acc = acc;	
+		this.acc = acc;
 		this.critChance = critChance;
 	}
-	public double getAcc()
-	{
+
+	public double getAcc() {
 		return acc;
 	}
-	public double getDmg()
-	{
+
+	public double getDmg() {
 		return dmg;
 	}
-	public double getCritChance()
-	{
+
+	public double getCritChance() {
 		return critChance;
 	}
-	public String getWeaponName()
-	{
+
+	public String getWeaponName() {
 		return weaponName;
 	}
 
-	
 }

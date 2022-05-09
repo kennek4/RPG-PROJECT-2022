@@ -10,7 +10,6 @@ public class Enemy {
 
 			@Override
 			String stateDialogue() {
-				// TODO Auto-generated method stub
 				return "*Looks in your direction*";
 			}
 

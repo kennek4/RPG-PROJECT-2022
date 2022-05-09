@@ -39,6 +39,7 @@ public class HeartBeat implements Runnable {
 	public Enemy.EnemyState eState;
 	public InputDriver inputDriver;
 	private HeartBeat.State hbState;
+	public UI ui;
 
 	// Combat variables
 	private int combatDistance;
@@ -89,7 +90,7 @@ public class HeartBeat implements Runnable {
 
 	public void shootingPos() {
 		if (pState == PlayerState.NOT_IN_COVER) {
-			System.out.println("You are already in shooting position");
+			System.out.println("You are already standing...");
 		} else {
 			pState = PlayerState.NOT_IN_COVER;
 			System.out.println("\nYou stand in shooting position");
@@ -110,18 +111,27 @@ public class HeartBeat implements Runnable {
 	}
 
 	private void playerAttack() {
-		enemy.hp -= player.weapon.dmg;
-		System.out.println("*\n...and hit the enemy!*");
-		System.out.printf("\n[You hit the enemy for %f]", player.weapon.dmg);
+		if (r.nextDouble(100) > player.weapon.acc) {
+			System.out.println("\n*...and you missed!*");
+		} else {
+			enemy.hp -= player.weapon.dmg;
+			System.out.println("\n*...and hit the enemy!*");
+			System.out.printf("\n[You hit the enemy for %f]", player.weapon.dmg);
+		}
 	}
 
 	private void enemyAttack() {
+
 		if (pState == Player.PlayerState.IN_COVER) {
 			System.out.println("*The enemy missed! The enemy hit your cover instead...*");
+		} else if (r.nextDouble(100) > 45.00) {
+			System.out.println("*Bullets from the enemy zip past you and miss!*");
+
 		} else {
 			player.hp -= enemy.dmg;
-			System.out.println("\n*You've been hit!*");
+			System.out.println("*You've been hit!*");
 			System.out.printf("\n[The enemy hit you for %d]", enemy.dmg);
+
 		}
 	}
 
@@ -134,9 +144,9 @@ public class HeartBeat implements Runnable {
 				playerAttack();
 				enemyAttack();
 			}
-		} else if (playerAttackAction && !enemyAttackAction) {
+		} else if (playerAttackAction && !enemyAttackAction) { // if enemy missed
 			playerAttack();
-		} else if (enemyAttackAction && !playerAttackAction) {
+		} else if (enemyAttackAction && !playerAttackAction) { // if player missed or didn't queue up an attack action
 			enemyAttack();
 		}
 
