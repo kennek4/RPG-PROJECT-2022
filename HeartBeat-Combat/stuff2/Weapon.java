@@ -1,25 +1,53 @@
 package stuff2;
 
-public class Weapon {
-	double dmg, acc, critChance;
-	String weaponName;
+import java.util.Random;
 
-	Weapon(String weaponName, int dmg, double acc, double critChance) {
+public class Weapon {
+	public int dmg, acc, critChance, ammoCapacity, shootCost, currentAmmoCount;
+	private String weaponName;
+
+	Weapon(String weaponName, int dmg, int acc, int critChance, int ammoCapacity, int shootCost) {
 		this.weaponName = weaponName;
+
+		// Main Stats
 		this.dmg = dmg;
+		this.ammoCapacity = ammoCapacity;
+		this.currentAmmoCount = ammoCapacity;
+		this.shootCost = shootCost;
+
+		// Secondary stats
 		this.acc = acc;
 		this.critChance = critChance;
 	}
 
-	public double getAcc() {
+	public void shootWeapon() {
+		if (currentAmmoCount == 0) {
+			System.out.println("*You are out of ammo...*");
+		} else {
+			currentAmmoCount -= shootCost;
+			System.out.printf("\nAmmo: %d", currentAmmoCount);
+		}
+	}
+
+	public void reloadWeapon() {
+		System.out.println("\n[You reload your weapon...]");
+		currentAmmoCount = ammoCapacity;
+		System.out.printf("\nAmmo: %d", currentAmmoCount);
+	}
+
+	public int getAmmoCount() {
+		return currentAmmoCount;
+	}
+
+	public int getAcc() {
 		return acc;
 	}
 
-	public double getDmg() {
+	public int getDmg() {
 		return dmg;
 	}
 
-	public double getCritChance() {
+	public int getCritChance() {
 		return critChance;
 	}
 

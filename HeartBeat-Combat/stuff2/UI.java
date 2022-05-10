@@ -81,16 +81,20 @@ public class UI implements Runnable {
 
         // Buttons
         JButton btn1 = new JButton("Take Cover");
-        btn1.setPreferredSize(new Dimension(200, 100));
-        btn1.addActionListener(e -> hb.takeCover());
+        btn1.setPreferredSize(new Dimension(100, 100));
+        btn1.addActionListener(a -> hb.takeCover());
 
         JButton btn2 = new JButton("Shooting");
-        btn2.setPreferredSize(new Dimension(200, 100));
-        btn2.addActionListener(e -> hb.shootingPos());
+        btn2.setPreferredSize(new Dimension(100, 100));
+        btn2.addActionListener(b -> hb.shootingPos());
 
-        JButton btn3 = new JButton("button 3");
-        btn3.setPreferredSize(new Dimension(200, 100));
-        btn3.addActionListener(e -> hb.queuePlayerAttack());
+        JButton btn3 = new JButton("attack");
+        btn3.setPreferredSize(new Dimension(100, 100));
+        btn3.addActionListener(f -> hb.queuePlayerAttack());
+
+        JButton btn4 = new JButton("reload");
+        btn4.setPreferredSize(new Dimension(100, 100));
+        btn4.addActionListener(d -> hb.queueReload());
 
         outputBox.add(textBoxOne);
         outputBox.add(textBoxTwo);
@@ -101,6 +105,7 @@ public class UI implements Runnable {
         root.add(btn1);
         root.add(btn2);
         root.add(btn3);
+        root.add(btn4);
 
         root.add(outputBox, c);
 
