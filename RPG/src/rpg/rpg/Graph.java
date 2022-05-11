@@ -14,9 +14,10 @@ class Graph {
     	}
         int value;
         int id;
-        Place place;
+        Place srcPlace;
+        ArrayList<String> dests;
         Node(Place place, int id)  {
-            this.place = place;
+            this.srcPlace = place;
             this.id = id;
         }
     };
@@ -36,7 +37,7 @@ List<List<Node>> adj_list = new ArrayList<>();
         for (Edge e : edges)
         {
             // allocate new node in adjacency List from src to dest
-            adj_list.get(e.src).add(new Node(e.place, e.dest));
+            adj_list.get(e.src).add(new Node(e.srcPlace, e.dest));
         }
     }
 // print adjacency list for the graph

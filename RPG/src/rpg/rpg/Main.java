@@ -14,17 +14,17 @@ public class Main {
 		int count = 0;
 		// define edges of the graph
 		MapList firstMap = new MapList();
-		firstMap.edges = Arrays.asList(new Edge(0, 1, new Place("Park")),
-				new Edge(1, 0, new Place("Hospital")), new Edge(1, 2, new Place("Hospital")),
-				new Edge(2, 1, new Place("Road")), new Edge(2, 3, new Place("Road")),
-				new Edge(3, 2, new Place("Fire Station")), new Edge(3, 4, new Place("Fire Station")),
-				new Edge(4, 3, new Place("Road")), new Edge(4, 5, new Place("Road")), new Edge(4, 8, new Place("Road")),
-				new Edge(5, 6, new Place("Warehouse")), new Edge(5, 4, new Place("Warehouse")),
-				new Edge(6, 7, new Place("Jewellery Store")), new Edge(6, 5, new Place("Jewellery Store")),
-				new Edge(7, 11, new Place("Factory")),
-				new Edge(8, 9, new Place("Road")),
-				new Edge(9, 10, new Place("Lumber Store")),
-				new Edge(10, 11, new Place("Road")));
+		firstMap.edges = Arrays.asList(new Edge(0, 1, new Place("Hospital"),new Place("Park")),
+				new Edge(1, 0, new Place("Park"),new Place("Hospital")), new Edge(1, 2, new Place("Road"),new Place("Hospital")));
+			//	new Edge(2, 1, new Place("Hospital")), new Edge(2, 3, new Place("Road")),
+			//	new Edge(3, 2, new Place("Fire Station")), new Edge(3, 4, new Place("Road")),
+			//	new Edge(4, 3, new Place("Road")), new Edge(4, 5, new Place("KEN")), new Edge(4, 8, new Place("Road")),
+			//	new Edge(5, 6, new Place("Warehouse")), new Edge(5, 4, new Place("Warehouse")),
+			//	new Edge(6, 7, new Place("Jewellery Store")), new Edge(6, 5, new Place("Jewellery Store")),
+			//	new Edge(7, 11, new Place("Factory")),
+			//	new Edge(8, 9, new Place("Road")),
+			//	new Edge(9, 10, new Place("Lumber Store")),
+			//	new Edge(10, 11, new Place("Road")));
 
 		// call graph class Constructor to construct a graph
 		Graph graph = new Graph(firstMap.edges);
@@ -51,7 +51,7 @@ public class Main {
 		HashMap<Integer, Graph.Node> options = new HashMap<>();
 		while (true) {
 			System.out.print(
-					"You are at: " + src_vertex + " " + graph.adj_list.get(src_vertex).get(choice).place.getPlace());
+					"You are at: " + src_vertex + " " + graph.adj_list.get(src_vertex).get(src_vertex).srcPlace.getPlace());
 
 			// traverse through the adjacency list and print the edges
 			for (int i = 0; i < graph.adj_list.get(src_vertex).size(); i++) {
@@ -61,7 +61,7 @@ public class Main {
 			// Prints out all the options and there location names
 			System.out.print("\nYour movement options are: ");
 			for (int i = 0; i < options.size(); i++) {
-				System.out.println(graph.adj_list.get(src_vertex).get(i).place.getPlace());
+				System.out.println(graph.adj_list.get(src_vertex).get(i).srcPlace.getPlace());
 				// System.out.println(options.get(i).place.place);
 			}
 
