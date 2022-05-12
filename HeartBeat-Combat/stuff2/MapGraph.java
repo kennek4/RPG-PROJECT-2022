@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class MapGraph {
 
@@ -12,6 +13,19 @@ public class MapGraph {
 
     public MapGraph() {
         this.adjNodes = new HashMap<MapNode, List<MapNode>>();
+    }
+
+    public MapNode getNode(String nodeName) {
+        MapNode ans;
+        Set<MapNode> adjNodesKeys = adjNodes.keySet();
+
+        for (MapNode node : adjNodesKeys) {
+            if (node.name == nodeName) {
+                ans = node;
+                return ans;
+            }
+        }
+        return null;
     }
 
     /**
@@ -55,8 +69,6 @@ public class MapGraph {
     /**
      * A method to remove the edge between two nodes
      * 
-     * @param nodeOneID   the id of the first node
-     * @param nodeTwoID   the id of the second node
      * @param nodeOneName the name of the first node
      * @param nodeTwoName the name of the second node
      */
@@ -85,12 +97,15 @@ public class MapGraph {
         return adjNodes.get(new MapNode(nodeName));
     }
 
+    /**
+     * Acts as the vertices on the graph
+     */
     class MapNode {
         // int id;
         String name;
+        public int enemyLevel, lootType, lootAmount;
 
         public MapNode(String name) {
-            // this.id = id;
             this.name = name;
         }
 
