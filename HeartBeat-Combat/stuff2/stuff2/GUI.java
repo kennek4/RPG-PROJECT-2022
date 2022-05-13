@@ -194,8 +194,17 @@ public class GUI {
         c.insets = new Insets(10, 10, 10, 10);
         environmentInfoBox.add(envInfoBoxImg, c);
 
+        actionPointBox = new JPanel();
+        actionPointBox.setPreferredSize(new Dimension(100, 100));
+        c.gridx = 0;
+        c.gridy = 0;
+        envInfoBoxImg.add(actionPointBox, c);
         
-
+        actionPointText = new JLabel("3 points");
+        actionPointText.setPreferredSize(new Dimension(150,100));
+        c.gridx = 1;
+        c.gridy = 0;
+        envInfoBoxImg.add(actionPointTest, c);
 
         window.pack();
         window.setVisible(true);
