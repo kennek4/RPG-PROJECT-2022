@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.time.chrono.JapaneseEra;
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
@@ -35,9 +36,15 @@ public class GUI {
 
     // RIGHT SIDE
     JPanel environmentInfoBox;
+    JPanel envInfoBoxImg;
+    JPanel actionPointBox;
+    JLabel actionPointText;
+    JPanel enemyBox;
+
 
     TitledBorder tBorder;
     GridLayout grid;
+
 
     public GUI() {
         window = new JFrame("Test");
@@ -167,6 +174,7 @@ public class GUI {
          */
         environmentInfoBox = new JPanel();
         environmentInfoBox.setBackground(Color.BLACK);
+        environmentInfoBox.setLayout(new GridBagLayout());
         environmentInfoBox.setPreferredSize(new Dimension(1000, 800));
         c.gridx = 1;
         c.gridy = 0;
@@ -174,6 +182,20 @@ public class GUI {
         c.gridheight = 2;
         c.insets = new Insets(10, 15, 10, 15);
         window.add(environmentInfoBox, c);
+
+        // BACKGROUND IMG
+        envInfoBoxImg = new JPanel();
+        envInfoBoxImg.setLayout(new GridBagLayout());
+        envInfoBoxImg.setPreferredSize(new Dimension(950, 750));
+        c.gridx = 1;
+        c.gridy = 1;
+        c.gridheight = 3;
+        c.gridwidth = 3;
+        c.insets = new Insets(10, 10, 10, 10);
+        environmentInfoBox.add(envInfoBoxImg, c);
+
+        
+
 
         window.pack();
         window.setVisible(true);
