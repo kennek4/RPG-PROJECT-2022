@@ -11,21 +11,41 @@ public class MapGraph {
     // Adjacency List
     private Map<MapNode, List<MapNode>> adjNodes;
 
+    // Constructor
     public MapGraph() {
         this.adjNodes = new HashMap<MapNode, List<MapNode>>();
     }
 
+    /**
+     * A method to access a MapNode object
+     * 
+     * @param nodeName the MapNode's name that will be accessed.
+     * @return the MapNode object
+     */
     public MapNode getNode(String nodeName) {
+        // What will be returned
         MapNode ans;
-        Set<MapNode> adjNodesKeys = adjNodes.keySet();
 
-        for (MapNode node : adjNodesKeys) {
-            if (node.name == nodeName) {
-                ans = node;
+        // Converting Set into an Array
+        Set<MapNode> adjNodesKeys = adjNodes.keySet();
+        MapNode[] keys = new MapNode[adjNodesKeys.size()];
+
+        int count = 0;
+        for (MapNode n : adjNodesKeys) {
+            keys[count] = n;
+            count++;
+        }
+
+        for (int i = 0; i < keys.length; i++) {
+            if (keys[i].name == nodeName) {
+                // returning ans
+                ans = keys[i];
                 return ans;
             }
         }
+
         return null;
+
     }
 
     /**

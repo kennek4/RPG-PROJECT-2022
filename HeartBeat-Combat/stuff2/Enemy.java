@@ -33,11 +33,15 @@ public class Enemy {
 		abstract String stateDialogue();
 	}
 
-	public int hp, dmg, dexterity;
+	public int hp, dexterity;
+	Weapon weapon;
+	Armour armour;
 
-	public Enemy(int hp, int dmg, int dexterity) {
+	public Enemy(int hp, int dexterity, Weapon weapon, Armour armour) {
 		this.hp = hp;
-		this.dmg = dmg;
 		this.dexterity = dexterity;
+
+		this.weapon = weapon;
+		this.armour = armour;
 	}
 }

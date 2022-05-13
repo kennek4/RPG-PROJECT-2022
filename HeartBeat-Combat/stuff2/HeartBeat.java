@@ -1,13 +1,13 @@
 package stuff2;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Random;
+
 import javax.swing.Timer;
 
 import stuff2.Enemy.EnemyState;
 import stuff2.Player.PlayerState;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Random;
 
 interface PlayerAction {
 	void executeAction();
@@ -42,8 +42,8 @@ public class HeartBeat implements Runnable {
 	public UI ui;
 
 	// Combat variables
-	private int combatDistance;
-	private int baseDistance;
+	// private int combatDistance;
+	// private int baseDistance;
 	private String playerAction;
 	private boolean enemyAttackAction;
 
@@ -58,7 +58,7 @@ public class HeartBeat implements Runnable {
 		this.pState = Player.PlayerState.NOT_IN_COVER;
 
 		this.inputDriver = inputDriver;
-		this.baseDistance = baseDistance;
+		// this.baseDistance = baseDistance;
 
 		// Setting the which combat cycle the heartbeat is in.
 		if (pState == Player.PlayerState.NOT_IN_COVER && eState == Enemy.EnemyState.LOOKING) {
@@ -71,7 +71,7 @@ public class HeartBeat implements Runnable {
 
 		}
 
-		combatDistance = ((int) Math.pow(player.perception, 2) / 2) + baseDistance;
+		// combatDistance = ((int) Math.pow(player.perception, 2) / 2) + baseDistance;
 
 		System.out.println(pState);
 
@@ -131,20 +131,29 @@ public class HeartBeat implements Runnable {
 	 * The player attack that is execute on heartbeat start
 	 */
 	private void playerAttack() {
+
+		System.out.println("\n\nPlayer Attack");
+
+		boolean validAmmoCount = (player.weapon.getAmmoCount() > 0);
+		boolean playerMissed = (r.nextInt(100) > player.weapon.getAcc());
+
 		System.out.println("\n*You line up your sights...*");
-		if (player.weapon.getAmmoCount() > 0) {
-			if (r.nextDouble(100) > player.weapon.getAcc()) {
-				System.out.println("\n*...and you missed!*");
+
+		if (validAmmoCount) {
+			int dmgDealt = player.weapon.shootWeapon();
+			if (!playerMissed) {
+				System.out.println("DMG before DMG Reduction: " + dmgDealt);
+				System.out.println("DMG after DMG Reduction: " + (dmgDealt * enemy.armour.percentDmgReduction));
+				enemy.hp -= (dmgDealt * enemy.armour.percentDmgReduction);
+
+				System.out.printf("\n[You hit the enemy for %f]", (dmgDealt * enemy.armour.percentDmgReduction));
+
 			} else {
-				enemy.hp -= player.weapon.getDmg();
-				System.out.println("\n*...and hit the enemy!*");
-				System.out.printf("\n[You hit the enemy for %d]", player.weapon.getDmg());
+				System.out.println("*...and you missed!*");
 			}
-			player.weapon.shootWeapon();
 		} else {
 			System.out.println("\nNo more ammo! Reload your gun!");
 		}
-
 	}
 
 	/**
@@ -152,22 +161,37 @@ public class HeartBeat implements Runnable {
 	 */
 	private void enemyAttack() {
 
-		if (pState == Player.PlayerState.IN_COVER) {
-			System.out.println("\n*The enemy missed! The enemy hit your cover instead...*");
-		} else if (r.nextDouble(100) > 30.00) {
-			System.out.println("\n*Bullets from the enemy zip past you and miss!*");
+		System.out.println("\n\nEnemy Attack");
+		int dmgDealt = enemy.weapon.shootWeapon();
+		boolean enemyMissed = (r.nextInt(100) > enemy.weapon.acc);
 
+		if (!enemyMissed) {
+			if (pState == PlayerState.NOT_IN_COVER) {
+
+				player.hp -= (dmgDealt * player.armour.percentDmgReduction);
+				System.out.println("\n*The enemy manages to land their shots!*");
+				System.out.printf("\n[The enemy hit you for %d]", dmgDealt);
+			} else {
+
+				// Reduced dmg taken due to being in cover.
+				player.hp -= (dmgDealt * 0.25);
+				System.out.println("\n*The enemy sprays towards your cover and their bullets miss you...*");
+				System.out.println("*Stray shrapnel pepper you...*");
+				System.out.printf("\n[The enemy hit you for %f]", (dmgDealt * 0.25));
+
+			}
 		} else {
-			player.hp -= enemy.dmg;
-			System.out.println("*\nYou've been hit!*");
-			System.out.printf("\n[The enemy hit you for %d]", enemy.dmg);
-
+			System.out.println("*\nA hail of bullets whizz pass you but miss you entirely...*");
 		}
+
 	}
 
 	// When player is engaged in combat
 	public void beatCycle() {
 		enemyAttackAction = r.nextBoolean();
+
+		System.out.printf("\nPLAYER HEALTH: %d", player.hp);
+		System.out.printf("\nENEMY HEALTH: %d\n", enemy.hp);
 
 		switch (playerAction) {
 			// if attack is queued
@@ -191,8 +215,16 @@ public class HeartBeat implements Runnable {
 			case ("reload"):
 				playerReload();
 				break;
+
+			// If nothing is queued
 			case ("none"):
 				System.out.println("You missed your chance...");
+
+				// Enemy Attack
+				if (enemyAttackAction) {
+					enemyAttack();
+				}
+
 				break;
 		}
 
@@ -218,7 +250,7 @@ public class HeartBeat implements Runnable {
 	 */
 	@Override
 	public void run() {
-		Timer timer = new Timer(5000, new ActionListener() {
+		Timer timer = new Timer(10000, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println(playerAction);

@@ -6,7 +6,10 @@ public class Weapon {
 	public int dmg, acc, critChance, ammoCapacity, shootCost, currentAmmoCount;
 	private String weaponName;
 
-	Weapon(String weaponName, int dmg, int acc, int critChance, int ammoCapacity, int shootCost) {
+	private Random r = new Random();
+
+	public Weapon(String weaponName, int dmg, int acc, int critChance, int ammoCapacity, int shootCost) {
+
 		this.weaponName = weaponName;
 
 		// Main Stats
@@ -20,13 +23,44 @@ public class Weapon {
 		this.critChance = critChance;
 	}
 
-	public void shootWeapon() {
+	public int shootWeapon() {
+		// if (currentAmmoCount == 0) {
+		// System.out.println("*You are out of ammo...*");
+		// } else {
+		// currentAmmoCount -= shootCost;
+		// System.out.printf("\nAmmo: %d", currentAmmoCount);
+		// }
 		if (currentAmmoCount == 0) {
-			System.out.println("*You are out of ammo...*");
-		} else {
-			currentAmmoCount -= shootCost;
-			System.out.printf("\nAmmo: %d", currentAmmoCount);
+			System.out.println("*\nYou squeeze the trigger and hear a dry click...*");
+			System.out.println("You couldn't shoot because you ran out of ammo...\n");
+			return 0;
 		}
+
+		// Total dmg that will be returned
+		int totalDmg = 0;
+
+		// Figuring out how many valid shots the weapon has left.
+		int validShots = shootCost;
+		if ((currentAmmoCount - shootCost) < 0) {
+			validShots = (shootCost - Math.abs(currentAmmoCount - shootCost));
+		}
+
+		System.out.println("Valid shots: " + validShots);
+
+		// Bullet calculations (each bullet will do different dmg)
+		for (int i = 0; i < validShots; i++) {
+			boolean isCrit = (r.nextInt(100) > critChance);
+
+			// If the bullet crit or not
+			if (isCrit) {
+				totalDmg += (dmg * 1.5);
+			} else {
+				totalDmg += totalDmg;
+			}
+		}
+
+		System.out.println("Total spray dmg: " + totalDmg);
+		return totalDmg;
 	}
 
 	public void reloadWeapon() {
