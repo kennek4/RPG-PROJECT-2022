@@ -1,4 +1,4 @@
-package stuff2;
+package CombatFiles;
 
 public class Armour {
 

@@ -1,4 +1,4 @@
-package stuff2;
+package CombatFiles;
 
 import java.util.Random;
 

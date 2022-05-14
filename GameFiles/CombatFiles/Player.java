@@ -1,4 +1,4 @@
-package stuff2;
+package CombatFiles;
 
 public class Player {
 	public static enum PlayerState {
