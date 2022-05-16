@@ -1,11 +1,5 @@
 {
     "java.project.sourcePaths": [
-<<<<<<< Updated upstream
-        "HeartBeat-Combat\\stuff2\\classes",
-        "HeartBeat-Combat"
-=======
-        "HeartBeat-Combat",
-        "RPG/src/rpg/rpg"
->>>>>>> Stashed changes
+        "GameFiles"
     ]
 }

@@ -33,11 +33,14 @@ public class Enemy {
 		abstract String stateDialogue();
 	}
 
-	public int hp, dexterity;
+	int hp, dexterity;
 	Weapon weapon;
 	Armour armour;
+	String name;
 
-	public Enemy(int hp, int dexterity, Weapon weapon, Armour armour) {
+	public Enemy(String name, int hp, int dexterity, Weapon weapon, Armour armour) {
+
+		this.name = name;
 		this.hp = hp;
 		this.dexterity = dexterity;
 

@@ -12,7 +12,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.border.TitledBorder;
 
 public class GUI {
 
@@ -27,7 +26,13 @@ public class GUI {
 
     // LEFT SIDE BOTTOM HALF VARIABLES
     JPanel pBotHalfPanel;
-    JButton abilityButton;
+
+    JButton button;
+    JButton targetButton1;
+    JButton targetButton2;
+    JButton targetButton3;
+    boolean toggle;
+
     JPanel abilityBox1;
     JPanel abilityBox2;
     JPanel abilityBox3;
@@ -48,11 +53,17 @@ public class GUI {
     JPanel enemy3;
 
     JLabel label;
-
-    TitledBorder tBorder;
+    JPanel botHalfPanel;
     GridLayout grid;
     CombatEncounter combatEncounter;
 
+    GUI ui
+
+    /**
+     * Combat GUI constructor
+     * 
+     * @param combatEncounter the CombatEncounter object that is to be used.
+     */
     public GUI(CombatEncounter combatEncounter) {
 
         // The combat system logic
@@ -153,64 +164,64 @@ public class GUI {
         abilityBox1 = new JPanel();
         abilityBox1.setBackground(Color.CYAN);
         abilityBox1.setLayout(new GridBagLayout());
-        abilityButton = new JButton("1");
-        abilityButton.addActionListener(a -> {
+        button = new JButton("1");
+        button.addActionListener(a -> {
             combatEncounter.usePlayerAbility(1);
         });
-        abilityButton.setPreferredSize(new Dimension(200, 100));
-        abilityBox1.add(abilityButton);
+        button.setPreferredSize(new Dimension(200, 100));
+        abilityBox1.add(button);
         pBotHalfPanel.add(abilityBox1);
 
         abilityBox2 = new JPanel();
         abilityBox2.setBackground(Color.CYAN);
         abilityBox2.setLayout(new GridBagLayout());
-        abilityButton = new JButton("2");
-        abilityButton.addActionListener(a -> {
+        button = new JButton("2");
+        button.addActionListener(a -> {
             combatEncounter.usePlayerAbility(2);
         });
-        abilityButton.setPreferredSize(new Dimension(200, 100));
-        abilityBox2.add(abilityButton);
+        button.setPreferredSize(new Dimension(200, 100));
+        abilityBox2.add(button);
         pBotHalfPanel.add(abilityBox2);
 
         abilityBox3 = new JPanel();
         abilityBox3.setBackground(Color.CYAN);
-        abilityButton = new JButton("3");
-        abilityButton.addActionListener(a -> {
+        button = new JButton("3");
+        button.addActionListener(a -> {
             combatEncounter.usePlayerAbility(3);
         });
-        abilityButton.setPreferredSize(new Dimension(200, 100));
-        abilityBox3.add(abilityButton);
+        button.setPreferredSize(new Dimension(200, 100));
+        abilityBox3.add(button);
         pBotHalfPanel.add(abilityBox3);
 
         abilityBox4 = new JPanel();
         abilityBox4.setBackground(Color.CYAN);
-        abilityButton = new JButton("4");
-        abilityButton.addActionListener(a -> {
+        button = new JButton("4");
+        button.addActionListener(a -> {
             combatEncounter.usePlayerAbility(4);
         });
-        abilityButton.setPreferredSize(new Dimension(200, 100));
-        abilityBox4.add(abilityButton);
+        button.setPreferredSize(new Dimension(200, 100));
+        abilityBox4.add(button);
         pBotHalfPanel.add(abilityBox4);
 
         abilityBox5 = new JPanel();
         abilityBox5.setBackground(Color.CYAN);
-        abilityButton = new JButton("5");
-        abilityButton.addActionListener(a -> {
+        button = new JButton("5");
+        button.addActionListener(a -> {
             combatEncounter.usePlayerAbility(5);
         });
 
-        abilityButton.setPreferredSize(new Dimension(200, 100));
-        abilityBox5.add(abilityButton);
+        button.setPreferredSize(new Dimension(200, 100));
+        abilityBox5.add(button);
         pBotHalfPanel.add(abilityBox5);
 
         abilityBox6 = new JPanel();
         abilityBox6.setBackground(Color.CYAN);
-        abilityButton = new JButton("6");
-        abilityButton.addActionListener(a -> {
+        button = new JButton("6");
+        button.addActionListener(a -> {
             combatEncounter.usePlayerAbility(6);
         });
-        abilityButton.setPreferredSize(new Dimension(200, 100));
-        abilityBox6.add(abilityButton);
+        button.setPreferredSize(new Dimension(200, 100));
+        abilityBox6.add(button);
         pBotHalfPanel.add(abilityBox6);
 
         /**
@@ -263,8 +274,16 @@ public class GUI {
         c.gridx = 0;
         c.gridy = 1;
         c.gridwidth = 3;
-        c.gridheight = 3;
+        c.gridheight = 1;
         envInfoBoxImg.add(enemyBox, c);
+
+        botHalfPanel = new JPanel();
+        botHalfPanel.setLayout(new GridBagLayout());
+        botHalfPanel.setBackground(Color.RED);
+        botHalfPanel.setPreferredSize(new Dimension(800, 100));
+        c.gridx = 0;
+        c.gridy = 2;
+        envInfoBoxImg.add(botHalfPanel, c);
 
         enemy2 = new JPanel();
         enemy2.setPreferredSize(new Dimension(200, 200));
@@ -276,7 +295,7 @@ public class GUI {
         enemyBox.add(enemy2, c);
 
         if (combatEncounter.enemy2 != null) {
-            label = new JLabel("2");
+            label = new JLabel(String.format("%d", combatEncounter.enemy2.hp));
             enemy2.add(label);
         }
 
@@ -290,7 +309,7 @@ public class GUI {
         enemyBox.add(enemy3, c);
 
         if (combatEncounter.enemy3 != null) {
-            label = new JLabel("3");
+            label = new JLabel(String.format("%d", combatEncounter.enemy3.hp));
             enemy3.add(label);
         }
 
@@ -304,15 +323,75 @@ public class GUI {
         c.gridwidth = 1;
         enemyBox.add(enemy1, c);
 
-        label = new JLabel("1");
+        label = new JLabel(String.format("%d", combatEncounter.enemy1.hp));
         enemy1.add(label);
+
+        /**
+         * TARGET BUTTONS
+         */
+        targetButton1 = new JButton("Target 1st Position");
+        targetButton1.setPreferredSize(new Dimension(200, 50));
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.insets = new Insets(15, 15, 15, 15);
+        targetButton1.addActionListener(a -> {
+            combatEncounter.playersTarget = combatEncounter.targetID.get(3);
+            System.out.println(combatEncounter.playersTarget.name);
+            targetToggle();
+            notify();
+        });
+        botHalfPanel.add(targetButton1, c);
+        targetButton1.setVisible(false);
+
+        targetButton2 = new JButton("Target 2nd Position");
+        targetButton2.setPreferredSize(new Dimension(200, 50));
+        c.gridx = 1;
+        c.insets = new Insets(15, 50, 15, 50);
+        targetButton2.addActionListener(a -> {
+            combatEncounter.playersTarget = combatEncounter.targetID.get(1);
+            System.out.println(combatEncounter.playersTarget.name);
+            targetToggle();
+            notify();
+        });
+        botHalfPanel.add(targetButton2, c);
+        targetButton2.setVisible(false);
+
+        targetButton3 = new JButton("Target 3rd Position");
+        targetButton3.setPreferredSize(new Dimension(200, 50));
+        c.gridx = 2;
+        c.insets = new Insets(15, 15, 15, 15);
+        targetButton3.addActionListener(a -> {
+            combatEncounter.playersTarget = combatEncounter.targetID.get(2);
+            System.out.println(combatEncounter.playersTarget.name);
+            targetToggle();
+            notify();
+        });
+        botHalfPanel.add(targetButton3, c);
+        targetButton3.setVisible(false);
 
         window.pack();
         window.setVisible(true);
     }
 
+    /**
+     * A helper method to change the values of the health bar (progress bar).
+     * 
+     * @param val the amount to change the health bar by. (can be positive or
+     *            negative)
+     */
     public void modifyHealthBar(int val) {
         healthBar.setValue(healthBar.getValue() - val);
     }
 
+    /**
+     * A method to turn targetting on and off.
+     */
+    public void targetToggle() {
+        toggle = !toggle;
+        targetButton1.setVisible(toggle);
+        targetButton2.setVisible(toggle);
+        targetButton3.setVisible(toggle);
+    }
 }

@@ -20,8 +20,9 @@ public class Player {
 	public int hp, perception, organization, dexterity, shooting;
 	Weapon weapon;
 	Armour armour;
+	Gun gun;
 
-	public Player(int hp, int perception, int org, int dex, int shooting, Weapon weapon, Armour armour) {
+	public Player(int hp, int perception, int org, int dex, int shooting, Armour armour) {
 		Player.playerState = PlayerState.NOT_IN_COVER;
 
 		// Player stats
@@ -31,7 +32,7 @@ public class Player {
 		this.shooting = shooting;
 
 		this.hp = hp;
-		this.weapon = weapon;
 		this.armour = armour;
+
 	}
 }

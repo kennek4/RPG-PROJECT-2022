@@ -4,25 +4,26 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Driver {
+    static Scanner sc = new Scanner(System.in);
+
     public static void main(String[] args) {
         Random r = new Random();
-        Scanner sc = new Scanner(System.in);
         Armour class4 = new Armour(4, 20);
-        Weapon ak47 = new Weapon("AK-47", 12, 70, 20, 30, 3);
-        Player player = new Player(100, 6, 4, 6, 6, ak47, class4);
+        // Weapon type56 = new Weapon("Type 56", 12, 70, 20, 30, 3);
 
+        Player player = new Player(100, 6, 4, 6, 6, class4);
+        Gun gun = new Gun(new GunAbility("Spray & Pray", true, 12, 2, 5, 55),
+                new GunAbility("Burst Fire", true, 9, 3, 3, 75),
+                new GunAbility("Double Time", true, 10, 2, 2, 85),
+                new GunAbility("Single Shot", true, 13, 1, 1, 99));
+        player.gun = gun;
         // int enemyCount = r.nextInt(3) + 1;
         // System.out.println(enemyCount);
-
-        CombatEncounter cb = new CombatEncounter(player, 3);
+        CombatEncounter cb = new CombatEncounter(player, r.nextInt(3) + 1);
         GUI ui = new GUI(cb);
 
-        while (true) {
-            System.out.print("\nReduce health by: ");
-            int dmg = sc.nextInt();
-            player.hp -= dmg;
-            ui.modifyHealthBar(dmg);
-            System.out.println(player.hp);
-        }
+        gun.ui = ui;
+        cb.ui = ui;
+
     }
 }
