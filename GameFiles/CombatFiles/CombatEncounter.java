@@ -17,6 +17,8 @@ public class CombatEncounter {
     // Player related variables
     Player player;
     Enemy playersTarget;
+    int actionPoints;
+
 
     // Enemy variables
     Enemy enemy1;
@@ -30,7 +32,7 @@ public class CombatEncounter {
 
     // ID HashMaps
     HashMap<Integer, Enemy> targetID = new HashMap<>();
-    HashMap<Integer, GunAbility> abilityID = new HashMap<>();
+    HashMap<Integer, GunAbility> abilityID;
 
     /**
      * CombatEncounter Constructor
@@ -41,6 +43,15 @@ public class CombatEncounter {
     public CombatEncounter(Player player, int numberOfEnemies) {
         this.player = player;
         this.numberOfEnemies = numberOfEnemies;
+
+        abilityID = new HashMap<>() {{
+            put(1, player.gun.a1);
+            put(2, player.gun.a2);
+            put(3, player.gun.a3);
+            put(4, player.gun.a4);
+        }};
+
+        actionPoints = 10;
         switch (this.numberOfEnemies) {
             // When only one enemy is inside the cell
             case (1):
@@ -79,12 +90,6 @@ public class CombatEncounter {
 
                 break;
         }
-
-        abilityID.put(1, player.gun.a1);
-        abilityID.put(2, player.gun.a2);
-        abilityID.put(3, player.gun.a3);
-        abilityID.put(4, player.gun.a4);
-
     }
 
     /**
@@ -94,6 +99,7 @@ public class CombatEncounter {
      * @param playerAbilityNumber the GunAbility ID.
      */
     void usePlayerAbility(int playerAbilityNumber) {
+        actionPoints -= abilityID.get(playerAbilityNumber).getAbilityCost();
         int dmg = abilityID.get(playerAbilityNumber).useAbility();
 
         // Goes through all of the enemies in the combat and applies damage to them.
@@ -103,7 +109,7 @@ public class CombatEncounter {
         }
 
         // Refreshes the HP of the enemies on the screen.
-        ui.refreshEnemyHP();
+        ui.refreshGUI();
     }
 
     /**
@@ -113,7 +119,24 @@ public class CombatEncounter {
      * @param target              the enemy target for the ability.
      */
     void targetedAbility(int playerAbilityNumber, Enemy target) {
+        actionPoints -= abilityID.get(playerAbilityNumber).getAbilityCost();
         target.hp -= abilityID.get(playerAbilityNumber).useAbility();
-        ui.refreshEnemyHP();
+        ui.refreshGUI();
+    }
+
+    /**
+     * A method that is called when the player's turn is finished.
+     * This method deals with the combat logic for enemies.
+     */
+    void enemyTurn() {
+
+        // Runs through all the enemies and sees if they are capable of attacking or not by 
+        // checking the isActive property.
+        for (int i = 1; i < 4; i++) {
+            if (targetID.get(i).isActive == true) {
+                int dmg = targetID.get(i).attack();
+                player.hp -= dmg;
+            }
+        }
     }
 }

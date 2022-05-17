@@ -13,6 +13,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
+/**
+ * Class responsible for the GUI during combat.
+ */
 public class CombatGUI {
 
     // LEFT SIDE TOP HALF VARIABLES
@@ -170,13 +173,17 @@ public class CombatGUI {
         abilityBox1 = new JPanel();
         abilityBox1.setBackground(Color.CYAN);
         abilityBox1.setLayout(new GridBagLayout());
-        button = new JButton("1");
+        button = new JButton(combatEncounter.player.gun.a1.getAbilityName());
         button.addActionListener(a -> {
-            if (combatEncounter.player.gun.a1.needsTarget() == true) {
-                playerAbilityNumber = 1;
-                targetToggle();
+            if (combatEncounter.actionPoints > 0) {
+                if (combatEncounter.player.gun.a1.needsTarget() == true) {
+                    playerAbilityNumber = 1;
+                    targetToggle();
+                } else {
+                    combatEncounter.usePlayerAbility(1);
+                }
             } else {
-                combatEncounter.usePlayerAbility(1);
+                button.setEnabled(false);
             }
         });
         button.setPreferredSize(new Dimension(200, 100));
@@ -186,7 +193,7 @@ public class CombatGUI {
         abilityBox2 = new JPanel();
         abilityBox2.setBackground(Color.CYAN);
         abilityBox2.setLayout(new GridBagLayout());
-        button = new JButton("2");
+        button = new JButton(combatEncounter.player.gun.a2.getAbilityName());
         button.addActionListener(a -> {
             if (combatEncounter.player.gun.a2.needsTarget() == true) {
                 playerAbilityNumber = 2;
@@ -201,7 +208,7 @@ public class CombatGUI {
 
         abilityBox3 = new JPanel();
         abilityBox3.setBackground(Color.CYAN);
-        button = new JButton("3");
+        button = new JButton(combatEncounter.player.gun.a3.getAbilityName());
         button.addActionListener(a -> {
             if (combatEncounter.player.gun.a3.needsTarget() == true) {
                 playerAbilityNumber = 3;
@@ -216,7 +223,7 @@ public class CombatGUI {
 
         abilityBox4 = new JPanel();
         abilityBox4.setBackground(Color.CYAN);
-        button = new JButton("4");
+        button = new JButton(combatEncounter.player.gun.a4.getAbilityName());
         button.addActionListener(a -> {
             if (combatEncounter.player.gun.a4.needsTarget() == true) {
                 playerAbilityNumber = 4;
@@ -287,7 +294,7 @@ public class CombatGUI {
         c.gridwidth = 1;
         envInfoBoxImg.add(actionPointBox, c);
 
-        actionPointText = new JLabel("3");
+        actionPointText = new JLabel(String.format("%d", combatEncounter.actionPoints));
         actionPointText.setPreferredSize(new Dimension(150, 150));
         actionPointText.setBackground(Color.CYAN);
         c.gridx = 1;
@@ -419,9 +426,12 @@ public class CombatGUI {
     }
 
     /**
-     * Refreshes the HP numbers on the respective UI elements.
+     *  Refreshes / Updates the UI elements on the screen with their proper values.
      */
-    public void refreshEnemyHP() {
+    public void refreshGUI() {
+
+        // Refreshes the actions points to its updated values.
+        actionPointText.setText(String.format("%d", combatEncounter.actionPoints));;
 
         // If enemy1 exists
         if (combatEncounter.enemy1 != null) {

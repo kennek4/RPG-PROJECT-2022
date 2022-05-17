@@ -1,6 +1,7 @@
 package CombatFiles;
 
 import java.util.HashMap;
+import java.util.Random;
 
 public class Enemy {
 
@@ -19,11 +20,11 @@ public class Enemy {
 	int[] dmgBounds;
 
 	// DMG Range variables
-	int[] tier1 = {8, 15};
-	int[] tier2 = {};
-	int[] tier3 = {};
-	int[] tier4 = {};
-	int[] tier5 = {};
+	private int[] tier1 = {8, 15};
+	private int[] tier2 = {};
+	private int[] tier3 = {};
+	private int[] tier4 = {};    
+	private int[] tier5 = {};    // Boss level dmg
 
 	/**
 	 * The base dmg for different enemy tiers.
@@ -62,5 +63,17 @@ public class Enemy {
 
 		this.isActive = true;
 		this.dmgBounds = enemyTierDMGRanges.get(enemyTier);
+	}
+
+	/**
+	 * Enemy attack method, called when enemies need to attack the player.
+	 */
+	public int attack() {
+		Random r = new Random();
+		int dmg = (r.nextInt(dmgBounds[0], dmgBounds[1] + 1));
+
+		int actions = r.nextInt(1, 4);
+
+		return dmg * actions;
 	}
 }
