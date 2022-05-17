@@ -45,7 +45,7 @@ public class GunAbility {
         if (numberOfActions > 1) {
             // Calculating how many bullets hit.
             for (int i = 0; i < numberOfActions; i++) {
-                if (!(r.nextDouble(1.00, 101.0) > acc)) {
+                if (!((r.nextDouble() * 100) > acc)) {
                     actualShots++;
                 }
             }

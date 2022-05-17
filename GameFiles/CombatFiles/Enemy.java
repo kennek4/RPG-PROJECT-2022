@@ -19,7 +19,7 @@ public class Enemy {
 	int[] dmgBounds;
 
 	// DMG Range variables
-	int[] tier1 = {};
+	int[] tier1 = {8, 15};
 	int[] tier2 = {};
 	int[] tier3 = {};
 	int[] tier4 = {};

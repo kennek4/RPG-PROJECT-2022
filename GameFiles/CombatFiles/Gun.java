@@ -29,17 +29,4 @@ public class Gun {
         this.a4 = a4;
     }
 
-    /**
-     * Chooses a target for the abilities.
-     */
-    public void chooseTarget() {
-        ui.targetToggle();
-    }
-
-    /**
-     * Method that uses the ability.
-     */
-    public void useAbility() {
-        System.out.println("This is where you use the ability.");
-    }
 }
