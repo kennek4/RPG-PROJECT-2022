@@ -1,14 +1,18 @@
 package CombatFiles;
 
+/**
+ * Gun class; holds unique GunAbilities for use in combat by the user.
+ */
 public class Gun {
 
+    // Variables
     String abilityName;
     int abilityBaseDMG, abilityCost;
     boolean needsTarget;
 
     GunAbility a1, a2, a3, a4;
 
-    GUI ui;
+    CombatGUI ui;
 
     /**
      * Constructor for a gun that requires an 4 abilities.

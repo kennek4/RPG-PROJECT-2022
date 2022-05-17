@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
-public class GUI {
+public class CombatGUI {
 
     // LEFT SIDE TOP HALF VARIABLES
     JFrame window;
@@ -47,24 +47,30 @@ public class GUI {
     JPanel actionPointBox;
     JLabel actionPointText;
 
+    // Enemy objects and info text
     JPanel enemyBox;
     JPanel enemy1;
     JPanel enemy2;
     JPanel enemy3;
+    JLabel enemyLabel1;
+    JLabel enemyLabel2;
+    JLabel enemyLabel3;
 
-    JLabel label;
     JPanel botHalfPanel;
     GridLayout grid;
     CombatEncounter combatEncounter;
+    Enemy target;
 
-    GUI ui
+    CombatGUI main;
+
+    int playerAbilityNumber;
 
     /**
      * Combat GUI constructor
      * 
      * @param combatEncounter the CombatEncounter object that is to be used.
      */
-    public GUI(CombatEncounter combatEncounter) {
+    public CombatGUI(CombatEncounter combatEncounter) {
 
         // The combat system logic
         this.combatEncounter = combatEncounter;
@@ -166,7 +172,12 @@ public class GUI {
         abilityBox1.setLayout(new GridBagLayout());
         button = new JButton("1");
         button.addActionListener(a -> {
-            combatEncounter.usePlayerAbility(1);
+            if (combatEncounter.player.gun.a1.needsTarget() == true) {
+                playerAbilityNumber = 1;
+                targetToggle();
+            } else {
+                combatEncounter.usePlayerAbility(1);
+            }
         });
         button.setPreferredSize(new Dimension(200, 100));
         abilityBox1.add(button);
@@ -177,7 +188,12 @@ public class GUI {
         abilityBox2.setLayout(new GridBagLayout());
         button = new JButton("2");
         button.addActionListener(a -> {
-            combatEncounter.usePlayerAbility(2);
+            if (combatEncounter.player.gun.a2.needsTarget() == true) {
+                playerAbilityNumber = 2;
+                targetToggle();
+            } else {
+                combatEncounter.usePlayerAbility(2);
+            }
         });
         button.setPreferredSize(new Dimension(200, 100));
         abilityBox2.add(button);
@@ -187,7 +203,12 @@ public class GUI {
         abilityBox3.setBackground(Color.CYAN);
         button = new JButton("3");
         button.addActionListener(a -> {
-            combatEncounter.usePlayerAbility(3);
+            if (combatEncounter.player.gun.a3.needsTarget() == true) {
+                playerAbilityNumber = 3;
+                targetToggle();
+            } else {
+                combatEncounter.usePlayerAbility(3);
+            }
         });
         button.setPreferredSize(new Dimension(200, 100));
         abilityBox3.add(button);
@@ -197,7 +218,12 @@ public class GUI {
         abilityBox4.setBackground(Color.CYAN);
         button = new JButton("4");
         button.addActionListener(a -> {
-            combatEncounter.usePlayerAbility(4);
+            if (combatEncounter.player.gun.a4.needsTarget() == true) {
+                playerAbilityNumber = 4;
+                targetToggle();
+            } else {
+                combatEncounter.usePlayerAbility(4);
+            }
         });
         button.setPreferredSize(new Dimension(200, 100));
         abilityBox4.add(button);
@@ -295,8 +321,8 @@ public class GUI {
         enemyBox.add(enemy2, c);
 
         if (combatEncounter.enemy2 != null) {
-            label = new JLabel(String.format("%d", combatEncounter.enemy2.hp));
-            enemy2.add(label);
+            enemyLabel2 = new JLabel(String.format("%d", combatEncounter.enemy2.hp));
+            enemy2.add(enemyLabel2);
         }
 
         enemy3 = new JPanel();
@@ -309,8 +335,8 @@ public class GUI {
         enemyBox.add(enemy3, c);
 
         if (combatEncounter.enemy3 != null) {
-            label = new JLabel(String.format("%d", combatEncounter.enemy3.hp));
-            enemy3.add(label);
+            enemyLabel3 = new JLabel(String.format("%d", combatEncounter.enemy3.hp));
+            enemy3.add(enemyLabel3);
         }
 
         enemy1 = new JPanel();
@@ -323,8 +349,8 @@ public class GUI {
         c.gridwidth = 1;
         enemyBox.add(enemy1, c);
 
-        label = new JLabel(String.format("%d", combatEncounter.enemy1.hp));
-        enemy1.add(label);
+        enemyLabel1 = new JLabel(String.format("%d", combatEncounter.enemy1.hp));
+        enemy1.add(enemyLabel1);
 
         /**
          * TARGET BUTTONS
@@ -337,10 +363,9 @@ public class GUI {
         c.gridwidth = 1;
         c.insets = new Insets(15, 15, 15, 15);
         targetButton1.addActionListener(a -> {
-            combatEncounter.playersTarget = combatEncounter.targetID.get(3);
-            System.out.println(combatEncounter.playersTarget.name);
+            target = combatEncounter.targetID.get(3);
+            combatEncounter.targetedAbility(playerAbilityNumber, target);
             targetToggle();
-            notify();
         });
         botHalfPanel.add(targetButton1, c);
         targetButton1.setVisible(false);
@@ -350,10 +375,9 @@ public class GUI {
         c.gridx = 1;
         c.insets = new Insets(15, 50, 15, 50);
         targetButton2.addActionListener(a -> {
-            combatEncounter.playersTarget = combatEncounter.targetID.get(1);
-            System.out.println(combatEncounter.playersTarget.name);
+            target = combatEncounter.targetID.get(1);
+            combatEncounter.targetedAbility(playerAbilityNumber, target);
             targetToggle();
-            notify();
         });
         botHalfPanel.add(targetButton2, c);
         targetButton2.setVisible(false);
@@ -363,10 +387,9 @@ public class GUI {
         c.gridx = 2;
         c.insets = new Insets(15, 15, 15, 15);
         targetButton3.addActionListener(a -> {
-            combatEncounter.playersTarget = combatEncounter.targetID.get(2);
-            System.out.println(combatEncounter.playersTarget.name);
+            target = combatEncounter.targetID.get(2);
+            combatEncounter.targetedAbility(playerAbilityNumber, target);
             targetToggle();
-            notify();
         });
         botHalfPanel.add(targetButton3, c);
         targetButton3.setVisible(false);
@@ -393,5 +416,47 @@ public class GUI {
         targetButton1.setVisible(toggle);
         targetButton2.setVisible(toggle);
         targetButton3.setVisible(toggle);
+    }
+
+    /**
+     * Refreshes the HP numbers on the respective UI elements.
+     */
+    public void refreshEnemyHP() {
+
+        // If enemy1 exists
+        if (combatEncounter.enemy1 != null) {
+            // If enemy1's HP is equal or below zero, disable it. This in turn "kills the
+            // enemy"
+            if (combatEncounter.enemy1.hp <= 0) {
+                combatEncounter.enemy1.isActive = false;
+                enemyLabel1.setText("ELIMINATED");
+            } else {
+                enemyLabel1.setText(String.format("HP: %d", combatEncounter.enemy1.hp));
+            }
+        }
+
+        // If enemy2 exists
+        if (combatEncounter.enemy2 != null) {
+            // If enemy2's HP is equal or below zero, disable it. This in turn "kills the
+            // enemy"
+            if (combatEncounter.enemy2.hp <= 0) {
+                combatEncounter.enemy2.isActive = false;
+                enemyLabel2.setText("ELIMINATED");
+            } else {
+                enemyLabel2.setText(String.format("HP: %d", combatEncounter.enemy2.hp));
+            }
+        }
+
+        // If enemy3 exists
+        if (combatEncounter.enemy3 != null) {
+            // If enemy3's HP is equal or below zero, disable it. This in turn "kills the
+            // enemy"
+            if (combatEncounter.enemy3.hp <= 0) {
+                combatEncounter.enemy3.isActive = false;
+                enemyLabel3.setText("ELIMINATED");
+            } else {
+                enemyLabel3.setText(String.format("HP: %d", combatEncounter.enemy3.hp));
+            }
+        }
     }
 }

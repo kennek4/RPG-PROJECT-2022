@@ -5,10 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The class that handles all combat logic between enemies and the player /
+ * user.
+ */
 public class CombatEncounter {
 
     Random r = new Random();
-    GUI ui;
+    CombatGUI ui;
 
     // Player related variables
     Player player;
@@ -20,14 +24,13 @@ public class CombatEncounter {
     Enemy enemy3;
     int numberOfEnemies;
 
-    // Possible weapon and armour combos for enemy initialization
-    List<Weapon> enemyWeapons = Arrays.asList(new Weapon("Type 88", 12, 75, 20, 30, 1),
-            new Weapon("Type 68", 10, 69, 15, 30, 1));
-
+    // Possible armour for enemy initialization
     List<Armour> enemyArmours = Arrays.asList(new Armour(0, 5),
             new Armour(2, 10), new Armour(3, 15));
 
+    // ID HashMaps
     HashMap<Integer, Enemy> targetID = new HashMap<>();
+    HashMap<Integer, GunAbility> abilityID = new HashMap<>();
 
     /**
      * CombatEncounter Constructor
@@ -42,7 +45,7 @@ public class CombatEncounter {
             // When only one enemy is inside the cell
             case (1):
                 System.out.println("this is 1");
-                enemy1 = new Enemy("Tom", 90, 5, enemyWeapons.get(r.nextInt(enemyWeapons.size())),
+                enemy1 = new Enemy("Tom", 90, 2,
                         enemyArmours.get(r.nextInt(enemyArmours.size())));
                 targetID.put(1, enemy1);
                 break;
@@ -50,11 +53,11 @@ public class CombatEncounter {
             // When two enemies are inside the cell
             case (2):
                 System.out.println("this is 2");
-                enemy1 = new Enemy("Tom", 90, 5, enemyWeapons.get(r.nextInt(enemyWeapons.size())),
+                enemy1 = new Enemy("Tom", 90, 2,
                         enemyArmours.get(r.nextInt(enemyArmours.size())));
                 targetID.put(1, enemy1);
 
-                enemy2 = new Enemy("Jeff", 90, 5, enemyWeapons.get(r.nextInt(enemyWeapons.size())),
+                enemy2 = new Enemy("Jeff", 90, 2,
                         enemyArmours.get(r.nextInt(enemyArmours.size())));
                 targetID.put(2, enemy2);
                 break;
@@ -62,68 +65,55 @@ public class CombatEncounter {
             // When three enemies are inside the cell (the max amount)
             case (3):
                 System.out.println("this is 3");
-                enemy1 = new Enemy("Tom", 90, 5, enemyWeapons.get(r.nextInt(enemyWeapons.size())),
+                enemy1 = new Enemy("Tom", 90, 2,
                         enemyArmours.get(r.nextInt(enemyArmours.size())));
                 targetID.put(1, enemy1);
 
-                enemy2 = new Enemy("Jeff", 90, 5, enemyWeapons.get(r.nextInt(enemyWeapons.size())),
+                enemy2 = new Enemy("Jeff", 90, 2,
                         enemyArmours.get(r.nextInt(enemyArmours.size())));
                 targetID.put(2, enemy2);
 
-                enemy3 = new Enemy("Billy", 90, 5, enemyWeapons.get(r.nextInt(enemyWeapons.size())),
+                enemy3 = new Enemy("Billy", 90, 2,
                         enemyArmours.get(r.nextInt(enemyArmours.size())));
                 targetID.put(3, enemy3);
 
                 break;
         }
+
+        abilityID.put(1, player.gun.a1);
+        abilityID.put(2, player.gun.a2);
+        abilityID.put(3, player.gun.a3);
+        abilityID.put(4, player.gun.a4);
+
     }
 
     /**
      * Uses the appropriate player ability depending on which button is pressed in
      * the UI.
      * 
-     * @param playerAbilityNumber the player ability ID.
+     * @param playerAbilityNumber the GunAbility ID.
      */
     void usePlayerAbility(int playerAbilityNumber) {
-        switch (playerAbilityNumber) {
+        int dmg = abilityID.get(playerAbilityNumber).useAbility();
 
-            // Attack Abilities
-            case (1):
-                System.out.println(1);
-                if (player.gun.a1.needsTarget()) {
-                    ui.targetToggle();
-                    try {
-                        synchronized (ui.main) {
-
-                        }
-                    } catch (InterruptedException e) {
-                    }
-                    playersTarget.hp -= player.gun.a1.useAbility();
-                } else {
-
-                }
-                break;
-            case (2):
-                System.out.println(2);
-                break;
-
-            case (3):
-                System.out.println(3);
-                break;
-
-            case (4):
-                System.out.println(4);
-                break;
-
-            // Defensive Abilities
-            case (5):
-                System.out.println(5);
-                break;
-
-            case (6):
-                System.out.println(6);
-                break;
+        // Goes through all of the enemies in the combat and applies damage to them.
+        for (int i = 0; i < targetID.size(); i++) {
+            playersTarget = targetID.get(i + 1);
+            playersTarget.hp -= dmg;
         }
+
+        // Refreshes the HP of the enemies on the screen.
+        ui.refreshEnemyHP();
     }
 
+    /**
+     * A method for targeted abilities to call.
+     * 
+     * @param playerAbilityNumber the GunAbility ID.
+     * @param target              the enemy target for the ability.
+     */
+    void targetedAbility(int playerAbilityNumber, Enemy target) {
+        target.hp -= abilityID.get(playerAbilityNumber).useAbility();
+        ui.refreshEnemyHP();
+    }
 }
