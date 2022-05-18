@@ -5,13 +5,14 @@ import java.util.Random;
 /**
  * Ability class that is used in the Gun class
  */
-public class GunAbility {
+public class PlayerAbility {
 
     // Variables
     private String abilityName;
     private boolean needsTarget;
-    private int abilityBaseDMG, abilityCost, numberOfActions;
+    private int abilityBaseDMG, abilityCost, numberOfActions, armourAmount;
     private double acc;
+    private int[] healRange;
 
     /**
      * Constructor for creating a new ability for a gun.
@@ -21,7 +22,7 @@ public class GunAbility {
      * @param abilityBaseDMG the base damage dealt for the ability
      * @param abilityCost    the action cost of the ability.
      */
-    public GunAbility(String abilityName, boolean needsTarget, int abilityBaseDMG, int abilityCost,
+    public PlayerAbility(String abilityName, boolean needsTarget, int abilityBaseDMG, int abilityCost,
             int numberOfActions, double acc) {
         this.abilityName = abilityName;
         this.needsTarget = needsTarget;
@@ -29,6 +30,21 @@ public class GunAbility {
         this.abilityCost = abilityCost;
         this.numberOfActions = numberOfActions;
         this.acc = acc;
+    }
+
+    /**
+     * Constructor for creating player abilites outside of the gun.
+     * 
+     * @param abilityName
+     * @param healAmount
+     * @param armourAmount
+     * @param abilityCost
+     */
+    public PlayerAbility(String abilityName, int[] healRange, int armourAmount, int abilityCost) {
+        this.abilityName = abilityName;
+        this.healRange = healRange;
+        this.armourAmount = armourAmount;
+        this.abilityCost = abilityCost;
     }
 
     /**
@@ -55,6 +71,25 @@ public class GunAbility {
         } else {
             return abilityBaseDMG;
         }
+    }
+
+    /**
+     * A method to return the armour value.
+     * 
+     * @return armourAmount
+     */
+    public int getArmourAmount() {
+        return armourAmount;
+    }
+
+    /**
+     * A method that returns an array of length 2 that contains the bounds for
+     * player healing.
+     * 
+     * @return healrange
+     */
+    public int[] getHealRange() {
+        return healRange;
     }
 
     /**

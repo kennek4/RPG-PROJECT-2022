@@ -19,7 +19,6 @@ public class CombatEncounter {
     Enemy playersTarget;
     int actionPoints;
 
-
     // Enemy variables
     Enemy enemy1;
     Enemy enemy2;
@@ -32,7 +31,7 @@ public class CombatEncounter {
 
     // ID HashMaps
     HashMap<Integer, Enemy> targetID = new HashMap<>();
-    HashMap<Integer, GunAbility> abilityID;
+    HashMap<Integer, PlayerAbility> abilityID;
 
     /**
      * CombatEncounter Constructor
@@ -44,12 +43,16 @@ public class CombatEncounter {
         this.player = player;
         this.numberOfEnemies = numberOfEnemies;
 
-        abilityID = new HashMap<>() {{
-            put(1, player.gun.a1);
-            put(2, player.gun.a2);
-            put(3, player.gun.a3);
-            put(4, player.gun.a4);
-        }};
+        abilityID = new HashMap<>() {
+            {
+                put(1, player.gun.a1);
+                put(2, player.gun.a2);
+                put(3, player.gun.a3);
+                put(4, player.gun.a4);
+                put(5, new PlayerAbility("Bandage Up", new int[] { 10, 15 }, 0, 2));
+                put(6, new PlayerAbility("Hunker Down", null, player.armour.armourAmount, 4));
+            }
+        };
 
         actionPoints = 10;
         switch (this.numberOfEnemies) {
@@ -93,12 +96,14 @@ public class CombatEncounter {
     }
 
     /**
-     * Uses the appropriate player ability depending on which button is pressed in
+     * Uses the appropriate player gun ability depending on which button is pressed
+     * in
      * the UI.
      * 
      * @param playerAbilityNumber the GunAbility ID.
      */
-    void usePlayerAbility(int playerAbilityNumber) {
+    void usePlayerGunAbility(int playerAbilityNumber) {
+        player.hp -= 50;
         actionPoints -= abilityID.get(playerAbilityNumber).getAbilityCost();
         int dmg = abilityID.get(playerAbilityNumber).useAbility();
 
@@ -124,13 +129,31 @@ public class CombatEncounter {
         ui.refreshGUI();
     }
 
+    void useSupportAbility(int playerAbilityNumber) {
+        actionPoints -= abilityID.get(playerAbilityNumber).getAbilityCost();
+        switch (playerAbilityNumber) {
+            // Healing
+            case (5):
+                player.hp += r.nextInt(abilityID.get(playerAbilityNumber).getHealRange()[0],
+                        abilityID.get(playerAbilityNumber).getHealRange()[1] + 1);
+                break;
+            // Armour / Shield
+            case (6):
+
+                break;
+        }
+
+        ui.refreshGUI();
+    }
+
     /**
      * A method that is called when the player's turn is finished.
      * This method deals with the combat logic for enemies.
      */
     void enemyTurn() {
 
-        // Runs through all the enemies and sees if they are capable of attacking or not by 
+        // Runs through all the enemies and sees if they are capable of attacking or not
+        // by
         // checking the isActive property.
         for (int i = 1; i < 4; i++) {
             if (targetID.get(i).isActive == true) {

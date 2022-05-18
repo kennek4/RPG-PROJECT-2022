@@ -10,7 +10,7 @@ public class Gun {
     int abilityBaseDMG, abilityCost;
     boolean needsTarget;
 
-    GunAbility a1, a2, a3, a4;
+    PlayerAbility a1, a2, a3, a4;
 
     CombatGUI ui;
 
@@ -22,7 +22,7 @@ public class Gun {
      * @param a3 ability 3
      * @param a4 ability 4
      */
-    public Gun(GunAbility a1, GunAbility a2, GunAbility a3, GunAbility a4) {
+    public Gun(PlayerAbility a1, PlayerAbility a2, PlayerAbility a3, PlayerAbility a4) {
         this.a1 = a1;
         this.a2 = a2;
         this.a3 = a3;

@@ -11,10 +11,10 @@ public class Driver {
         Armour class4 = new Armour(4, 20);
 
         Player player = new Player(100, 6, 4, 6, 6, class4);
-        Gun gun = new Gun(new GunAbility("Spray & Pray", false, 5, 2, 5, 55),
-                new GunAbility("Burst Fire", true, 9, 3, 3, 75),
-                new GunAbility("Double Time", true, 10, 2, 2, 85),
-                new GunAbility("Single Shot", true, 13, 1, 1, 99));
+        Gun gun = new Gun(new PlayerAbility("Spray & Pray", false, 5, 2, 5, 55),
+                new PlayerAbility("Burst Fire", true, 9, 3, 3, 75),
+                new PlayerAbility("Double Time", true, 10, 2, 2, 85),
+                new PlayerAbility("Single Shot", true, 13, 1, 1, 99));
         player.gun = gun;
 
         CombatEncounter cb = new CombatEncounter(player, r.nextInt(3) + 1);

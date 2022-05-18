@@ -1,5 +1,7 @@
 package CombatFiles;
 
+import java.util.HashMap;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -30,7 +32,16 @@ public class CombatGUI {
     // LEFT SIDE BOTTOM HALF VARIABLES
     JPanel pBotHalfPanel;
 
-    JButton button;
+    JButton abilityButton1;
+    JButton abilityButton2;
+    JButton abilityButton3;
+    JButton abilityButton4;
+    JButton abilityButton5;
+    JButton abilityButton6;
+
+    // Mapping buttons to a HashMap for easier access
+    HashMap<Integer, JButton> abilityButtonID;
+
     JButton targetButton1;
     JButton targetButton2;
     JButton targetButton3;
@@ -49,6 +60,7 @@ public class CombatGUI {
     JPanel envTopHalf;
     JPanel actionPointBox;
     JLabel actionPointText;
+    JButton endTurnButton;
 
     // Enemy objects and info text
     JPanel enemyBox;
@@ -60,6 +72,7 @@ public class CombatGUI {
     JLabel enemyLabel3;
 
     JPanel botHalfPanel;
+    JLabel label;
     GridLayout grid;
     CombatEncounter combatEncounter;
     Enemy target;
@@ -173,89 +186,143 @@ public class CombatGUI {
         abilityBox1 = new JPanel();
         abilityBox1.setBackground(Color.CYAN);
         abilityBox1.setLayout(new GridBagLayout());
-        button = new JButton(combatEncounter.player.gun.a1.getAbilityName());
-        button.addActionListener(a -> {
-            if (combatEncounter.actionPoints > 0) {
-                if (combatEncounter.player.gun.a1.needsTarget() == true) {
-                    playerAbilityNumber = 1;
-                    targetToggle();
-                } else {
-                    combatEncounter.usePlayerAbility(1);
-                }
+        abilityButton1 = new JButton(combatEncounter.player.gun.a1.getAbilityName());
+        abilityButton1.addActionListener(a -> {
+            // if ((combatEncounter.actionPoints > 0)
+            // && !(combatEncounter.actionPoints -
+            // combatEncounter.player.gun.a1.getAbilityCost() < 0)) {
+            // if (combatEncounter.player.gun.a1.needsTarget() == true) {
+            // playerAbilityNumber = 1;
+            // targetToggle();
+            // } else {
+            // combatEncounter.usePlayerAbility(1);
+            // }
+            // } else {
+            // abilityButton1.setEnabled(false);
+            // }
+            if (combatEncounter.player.gun.a1.needsTarget() == true) {
+                playerAbilityNumber = 1;
+                targetToggle();
             } else {
-                button.setEnabled(false);
+                combatEncounter.usePlayerGunAbility(1);
             }
         });
-        button.setPreferredSize(new Dimension(200, 100));
-        abilityBox1.add(button);
+        abilityButton1.setPreferredSize(new Dimension(200, 100));
+        abilityBox1.add(abilityButton1);
         pBotHalfPanel.add(abilityBox1);
 
         abilityBox2 = new JPanel();
         abilityBox2.setBackground(Color.CYAN);
         abilityBox2.setLayout(new GridBagLayout());
-        button = new JButton(combatEncounter.player.gun.a2.getAbilityName());
-        button.addActionListener(a -> {
+        abilityButton2 = new JButton(combatEncounter.player.gun.a2.getAbilityName());
+        abilityButton2.addActionListener(a -> {
+            // if ((combatEncounter.actionPoints > 0)
+            // && !(combatEncounter.actionPoints -
+            // combatEncounter.player.gun.a2.getAbilityCost() < 0)) {
+            // if (combatEncounter.player.gun.a2.needsTarget() == true) {
+            // playerAbilityNumber = 2;
+            // targetToggle();
+            // } else {
+            // combatEncounter.usePlayerAbility(2);
+            // }
+            // } else {
+            // abilityButton2.setEnabled(false);
+            // }
             if (combatEncounter.player.gun.a2.needsTarget() == true) {
                 playerAbilityNumber = 2;
                 targetToggle();
             } else {
-                combatEncounter.usePlayerAbility(2);
+                combatEncounter.usePlayerGunAbility(2);
             }
         });
-        button.setPreferredSize(new Dimension(200, 100));
-        abilityBox2.add(button);
+        abilityButton2.setPreferredSize(new Dimension(200, 100));
+        abilityBox2.add(abilityButton2);
         pBotHalfPanel.add(abilityBox2);
 
         abilityBox3 = new JPanel();
         abilityBox3.setBackground(Color.CYAN);
-        button = new JButton(combatEncounter.player.gun.a3.getAbilityName());
-        button.addActionListener(a -> {
+        abilityButton3 = new JButton(combatEncounter.player.gun.a3.getAbilityName());
+        abilityButton3.addActionListener(a -> {
+            // if ((combatEncounter.actionPoints > 0)
+            // && !(combatEncounter.actionPoints -
+            // combatEncounter.player.gun.a3.getAbilityCost() < 0)) {
+            // if (combatEncounter.player.gun.a3.needsTarget() == true) {
+            // playerAbilityNumber = 3;
+            // targetToggle();
+            // } else {
+            // combatEncounter.usePlayerAbility(3);
+            // }
+            // } else {
+            // abilityButton3.setEnabled(false);
+            // }
             if (combatEncounter.player.gun.a3.needsTarget() == true) {
                 playerAbilityNumber = 3;
                 targetToggle();
             } else {
-                combatEncounter.usePlayerAbility(3);
+                combatEncounter.usePlayerGunAbility(3);
             }
         });
-        button.setPreferredSize(new Dimension(200, 100));
-        abilityBox3.add(button);
+        abilityButton3.setPreferredSize(new Dimension(200, 100));
+        abilityBox3.add(abilityButton3);
         pBotHalfPanel.add(abilityBox3);
 
         abilityBox4 = new JPanel();
         abilityBox4.setBackground(Color.CYAN);
-        button = new JButton(combatEncounter.player.gun.a4.getAbilityName());
-        button.addActionListener(a -> {
+        abilityButton4 = new JButton(combatEncounter.player.gun.a4.getAbilityName());
+        abilityButton4.addActionListener(a -> {
+            // if ((combatEncounter.actionPoints > 0)
+            // && (combatEncounter.actionPoints -
+            // combatEncounter.player.gun.a4.getAbilityCost() < 0)) {
+            // if (combatEncounter.player.gun.a4.needsTarget() == true) {
+            // playerAbilityNumber = 4;
+            // targetToggle();
+            // } else {
+            // combatEncounter.usePlayerAbility(4);
+            // }
+            // }
+
             if (combatEncounter.player.gun.a4.needsTarget() == true) {
                 playerAbilityNumber = 4;
                 targetToggle();
             } else {
-                combatEncounter.usePlayerAbility(4);
+                combatEncounter.usePlayerGunAbility(4);
             }
         });
-        button.setPreferredSize(new Dimension(200, 100));
-        abilityBox4.add(button);
+        abilityButton4.setPreferredSize(new Dimension(200, 100));
+        abilityBox4.add(abilityButton4);
         pBotHalfPanel.add(abilityBox4);
 
         abilityBox5 = new JPanel();
         abilityBox5.setBackground(Color.CYAN);
-        button = new JButton("5");
-        button.addActionListener(a -> {
-            combatEncounter.usePlayerAbility(5);
+        abilityButton5 = new JButton(combatEncounter.abilityID.get(5).getAbilityName());
+        abilityButton5.addActionListener(a -> {
+            combatEncounter.useSupportAbility(5);
         });
 
-        button.setPreferredSize(new Dimension(200, 100));
-        abilityBox5.add(button);
+        abilityButton5.setPreferredSize(new Dimension(200, 100));
+        abilityBox5.add(abilityButton5);
         pBotHalfPanel.add(abilityBox5);
 
         abilityBox6 = new JPanel();
         abilityBox6.setBackground(Color.CYAN);
-        button = new JButton("6");
-        button.addActionListener(a -> {
-            combatEncounter.usePlayerAbility(6);
+        abilityButton6 = new JButton(combatEncounter.abilityID.get(6).getAbilityName());
+        abilityButton6.addActionListener(a -> {
+            combatEncounter.useSupportAbility(6);
         });
-        button.setPreferredSize(new Dimension(200, 100));
-        abilityBox6.add(button);
+        abilityButton6.setPreferredSize(new Dimension(200, 100));
+        abilityBox6.add(abilityButton6);
         pBotHalfPanel.add(abilityBox6);
+
+        abilityButtonID = new HashMap<>() {
+            {
+                put(1, abilityButton1);
+                put(2, abilityButton2);
+                put(3, abilityButton3);
+                put(4, abilityButton4);
+                put(5, abilityButton5);
+                put(6, abilityButton6);
+            }
+        };
 
         /**
          * Panel for the Right Side of the GUI
@@ -288,6 +355,7 @@ public class CombatGUI {
         actionPointBox = new JPanel();
         actionPointBox.setPreferredSize(new Dimension(150, 150));
         actionPointBox.setBackground(Color.RED);
+        actionPointBox.setLayout(new GridBagLayout());
         c.gridx = 0;
         c.gridy = 0;
         c.gridheight = 1;
@@ -297,8 +365,21 @@ public class CombatGUI {
         actionPointText = new JLabel(String.format("%d", combatEncounter.actionPoints));
         actionPointText.setPreferredSize(new Dimension(150, 150));
         actionPointText.setBackground(Color.CYAN);
+        c.gridx = 0;
+        actionPointBox.add(actionPointText, c);
+
+        endTurnButton = new JButton("END TURN");
+        endTurnButton.setPreferredSize(new Dimension(200, 50));
+        endTurnButton.addActionListener(a -> {
+
+        });
+        c.gridx = 2;
+        envInfoBoxImg.add(endTurnButton, c);
+
+        // Shows the name of the place that the combat is taking place in.
+        label = new JLabel("PLACE NAME");
         c.gridx = 1;
-        envInfoBoxImg.add(actionPointText, c);
+        envInfoBoxImg.add(label, c);
 
         enemyBox = new JPanel();
         enemyBox.setLayout(new GridBagLayout());
@@ -426,12 +507,24 @@ public class CombatGUI {
     }
 
     /**
-     *  Refreshes / Updates the UI elements on the screen with their proper values.
+     * Refreshes / Updates the UI elements on the screen with their proper values.
      */
     public void refreshGUI() {
 
+        healthBar.setValue(combatEncounter.player.hp);
+
         // Refreshes the actions points to its updated values.
-        actionPointText.setText(String.format("%d", combatEncounter.actionPoints));;
+        actionPointText.setText(String.format("%d", combatEncounter.actionPoints));
+
+        /**
+         * Disables buttons if the ability cost is more than available actions points
+         */
+
+        for (int i = 1; i < 6; i++) {
+            if (combatEncounter.abilityID.get(i).getAbilityCost() > combatEncounter.actionPoints) {
+                abilityButtonID.get(i).setEnabled(false);
+            }
+        }
 
         // If enemy1 exists
         if (combatEncounter.enemy1 != null) {
@@ -459,6 +552,7 @@ public class CombatGUI {
 
         // If enemy3 exists
         if (combatEncounter.enemy3 != null) {
+
             // If enemy3's HP is equal or below zero, disable it. This in turn "kills the
             // enemy"
             if (combatEncounter.enemy3.hp <= 0) {
@@ -468,5 +562,6 @@ public class CombatGUI {
                 enemyLabel3.setText(String.format("HP: %d", combatEncounter.enemy3.hp));
             }
         }
+
     }
 }
