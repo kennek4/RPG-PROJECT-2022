@@ -18,7 +18,7 @@ import javax.swing.JProgressBar;
 /**
  * Class responsible for the GUI during combat.
  */
-public class CombatGUI {
+public class CombatUI {
 
     // LEFT SIDE TOP HALF VARIABLES
     JFrame window;
@@ -77,7 +77,7 @@ public class CombatGUI {
     CombatEncounter combatEncounter;
     Enemy target;
 
-    CombatGUI main;
+    CombatUI main;
 
     int playerAbilityNumber;
 
@@ -86,7 +86,7 @@ public class CombatGUI {
      * 
      * @param combatEncounter the CombatEncounter object that is to be used.
      */
-    public CombatGUI(CombatEncounter combatEncounter) {
+    public CombatUI(CombatEncounter combatEncounter) {
 
         // The combat system logic
         this.combatEncounter = combatEncounter;
@@ -371,7 +371,7 @@ public class CombatGUI {
         endTurnButton = new JButton("END TURN");
         endTurnButton.setPreferredSize(new Dimension(200, 50));
         endTurnButton.addActionListener(a -> {
-
+            combatEncounter.endTurn();
         });
         c.gridx = 2;
         envInfoBoxImg.add(endTurnButton, c);
@@ -523,6 +523,15 @@ public class CombatGUI {
         for (int i = 1; i < 6; i++) {
             if (combatEncounter.abilityID.get(i).getAbilityCost() > combatEncounter.actionPoints) {
                 abilityButtonID.get(i).setEnabled(false);
+            }
+        }
+
+        /**
+         * Enables button if there is enough ability points.
+         */
+        for (int i = 1; i < 6; i++) {
+            if (combatEncounter.abilityID.get(i).getAbilityCost() < combatEncounter.actionPoints) {
+                abilityButtonID.get(i).setEnabled(true);
             }
         }
 

@@ -12,7 +12,7 @@ public class Gun {
 
     PlayerAbility a1, a2, a3, a4;
 
-    CombatGUI ui;
+    CombatUI ui;
 
     /**
      * Constructor for a gun that requires an 4 abilities.

@@ -20,8 +20,8 @@ public class Enemy {
 	int[] dmgBounds;
 
 	// DMG Range variables
-	private int[] tier1 = { 8, 15 };
-	private int[] tier2 = {};
+	private int[] tier1 = { 4, 8 };
+	private int[] tier2 = { 6 , 10};
 	private int[] tier3 = {};
 	private int[] tier4 = {};
 	private int[] tier5 = {}; // Boss level dmg
@@ -70,10 +70,6 @@ public class Enemy {
 	 */
 	public int attack() {
 		Random r = new Random();
-		int dmg = (r.nextInt(dmgBounds[0], dmgBounds[1] + 1));
-
-		int actions = r.nextInt(1, 4);
-
-		return dmg * actions;
+		return (r.nextInt(dmgBounds[1])) + dmgBounds[0];
 	}
 }

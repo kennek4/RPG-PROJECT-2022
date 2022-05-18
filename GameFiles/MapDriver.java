@@ -1,10 +1,10 @@
 
-import java.util.Scanner;
+// import java.util.Scanner;
 
 public class MapDriver {
     public static void main(String[] args) {
 
-        Scanner sc = new Scanner(System.in);
+        // Scanner sc = new Scanner(System.in);
 
         MapGraph map = new MapGraph();
         map.addNode("park");
@@ -22,8 +22,8 @@ public class MapDriver {
         while (true) {
             System.out.println("Where do you want to go?");
             System.out.println(map.getAdjList(currentPos));
-            String choice = sc.next();
-            currentPos = choice;
+            // String choice = sc.next();
+            // currentPos = choice;
         }
     }
 }

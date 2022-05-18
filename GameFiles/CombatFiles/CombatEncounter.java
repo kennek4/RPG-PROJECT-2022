@@ -12,7 +12,7 @@ import java.util.Random;
 public class CombatEncounter {
 
     Random r = new Random();
-    CombatGUI ui;
+    CombatUI ui;
 
     // Player related variables
     Player player;
@@ -106,7 +106,6 @@ public class CombatEncounter {
      * @param playerAbilityNumber the GunAbility ID.
      */
     void usePlayerGunAbility(int playerAbilityNumber) {
-        player.hp -= 50;
         actionPoints -= abilityID.get(playerAbilityNumber).getAbilityCost();
         int dmg = abilityID.get(playerAbilityNumber).useAbility();
 
@@ -132,13 +131,16 @@ public class CombatEncounter {
         ui.refreshGUI();
     }
 
+    /**
+     * Use player support ability
+     * @param playerAbilityNumber the support ability ID
+     */
     void useSupportAbility(int playerAbilityNumber) {
         actionPoints -= abilityID.get(playerAbilityNumber).getAbilityCost();
         switch (playerAbilityNumber) {
             // Healing
             case (5):
-                player.hp += r.nextInt(abilityID.get(playerAbilityNumber).getHealRange()[0],
-                        abilityID.get(playerAbilityNumber).getHealRange()[1] + 1);
+                player.hp += r.nextInt(abilityID.get(playerAbilityNumber).getHealRange()[1]) + abilityID.get(playerAbilityNumber).getHealRange()[0];
                 break;
             // Armour / Shield
             case (6):
@@ -159,9 +161,26 @@ public class CombatEncounter {
         // by
         // checking the isActive property.
         for (int i = 1; i < 4; i++) {
-            if (targetID.get(i).isActive == true) {
-                int dmg = targetID.get(i).attack();
-                player.hp -= dmg;
+            if (targetID.get(i) != null) {
+                if (targetID.get(i).isActive == true) {
+                    int dmg = targetID.get(i).attack();
+                    player.hp -= dmg;
+                }
+            }
+        }
+    }
+
+    /**
+     * End player turn, goes to next turn
+     */
+    void endTurn() {
+        actionPoints = 10;
+        for (int i = 1; i < 4; i++) {
+            if (targetID.get(i) != null) {
+                if (targetID.get(i).isActive == true) {
+                    enemyTurn();
+                    ui.refreshGUI();
+                }
             }
         }
     }

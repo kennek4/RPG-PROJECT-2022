@@ -18,7 +18,7 @@ public class Driver {
         player.gun = gun;
 
         CombatEncounter cb = new CombatEncounter(player, r.nextInt(3) + 1);
-        CombatGUI ui = new CombatGUI(cb);
+        CombatUI ui = new CombatUI(cb);
 
         gun.ui = ui;
         cb.ui = ui;
