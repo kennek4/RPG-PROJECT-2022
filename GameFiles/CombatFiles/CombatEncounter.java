@@ -43,6 +43,7 @@ public class CombatEncounter {
         this.player = player;
         this.numberOfEnemies = numberOfEnemies;
 
+        // Mapping the player skills to a HashMap for easier access later on.
         abilityID = new HashMap<>() {
             {
                 put(1, player.gun.a1);
@@ -54,7 +55,9 @@ public class CombatEncounter {
             }
         };
 
+        // The initial action points of the player.
         actionPoints = 10;
+
         switch (this.numberOfEnemies) {
             // When only one enemy is inside the cell
             case (1):
