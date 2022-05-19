@@ -22,9 +22,9 @@ public class Enemy {
 	// DMG Range variables
 	private int[] tier1 = { 4, 8 };
 	private int[] tier2 = { 6 , 10};
-	private int[] tier3 = {};
-	private int[] tier4 = {};
-	private int[] tier5 = {}; // Boss level dmg
+	private int[] tier3 = {8, 12};
+	private int[] tier4 = {9, 14};
+	private int[] tier5 = {10, 18}; // Boss level dmg
 
 	/**
 	 * The base dmg for different enemy tiers.

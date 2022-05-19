@@ -17,7 +17,7 @@ public class CombatEncounter {
     // Player related variables
     Player player;
     Enemy playersTarget;
-    int actionPoints;
+    int actionPoints, playerShield;
 
     // Enemy variables
     Enemy enemy1;
@@ -32,6 +32,7 @@ public class CombatEncounter {
     // ID HashMaps
     HashMap<Integer, Enemy> targetID = new HashMap<>();
     HashMap<Integer, PlayerAbility> abilityID;
+    HashMap<Integer, String> enemyNames;
 
     /**
      * CombatEncounter Constructor
@@ -54,6 +55,13 @@ public class CombatEncounter {
                 put(6, new PlayerAbility("Hunker Down", null, player.armour.armourAmount, 4));
             }
         };
+
+        enemyNames = new HashMap<>() {{
+
+            put(1, "Grunt");
+            put(2, "");
+
+        }};
 
         // The initial action points of the player.
         actionPoints = 10;
@@ -144,7 +152,7 @@ public class CombatEncounter {
                 break;
             // Armour / Shield
             case (6):
-
+                playerShield += abilityID.get(playerAbilityNumber).getArmourAmount();
                 break;
         }
 
@@ -171,7 +179,7 @@ public class CombatEncounter {
     }
 
     /**
-     * End player turn, goes to next turn
+     * End player turn, resets action points and enemies perform their actions
      */
     void endTurn() {
         actionPoints = 10;
@@ -183,5 +191,6 @@ public class CombatEncounter {
                 }
             }
         }
+        shield = 0;
     }
 }

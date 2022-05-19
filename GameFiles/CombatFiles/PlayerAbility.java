@@ -10,7 +10,7 @@ public class PlayerAbility {
     // Variables
     private String abilityName;
     private boolean needsTarget;
-    private int abilityBaseDMG, abilityCost, numberOfActions, armourAmount;
+    private int abilityBaseDMG, abilityCost, numberOfActions, turnLimit, armourAmount;
     private double acc;
     private int[] healRange;
 
@@ -18,17 +18,19 @@ public class PlayerAbility {
      * Constructor for creating a new ability for a gun.
      * 
      * @param abilityName    the name of the ability.
-     * @param needsTarget    if the ability requires a target to function
-     * @param abilityBaseDMG the base damage dealt for the ability
+     * @param needsTarget    if the ability requires a target to function.
+     * @param abilityBaseDMG the base damage dealt for the ability.
      * @param abilityCost    the action cost of the ability.
+     * @param turnLimit      the number of times the ability can be used in one turn.
      */
     public PlayerAbility(String abilityName, boolean needsTarget, int abilityBaseDMG, int abilityCost,
-            int numberOfActions, double acc) {
+            int numberOfActions, double acc, int turnLimit) {
         this.abilityName = abilityName;
         this.needsTarget = needsTarget;
         this.abilityBaseDMG = abilityBaseDMG;
         this.abilityCost = abilityCost;
         this.numberOfActions = numberOfActions;
+        this.turnLimit = turnLimit;
         this.acc = acc;
     }
 
