@@ -195,7 +195,7 @@ public class CombatEncounter {
          * 
          * 
          * 
-         * FIX THIS / IS WONKY
+         * FIX THIS / IS WONKY AS OF 12:00AM
          * 
          * 
          * 
