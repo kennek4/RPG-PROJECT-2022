@@ -32,7 +32,7 @@ public class CombatEncounter {
     // ID HashMaps
     HashMap<Integer, Enemy> targetID = new HashMap<>();
     HashMap<Integer, PlayerAbility> abilityID;
-    HashMap<Integer, String> enemyNames;
+    HashMap<Integer, Integer> abilityInitialPP;
 
     /**
      * CombatEncounter Constructor
@@ -51,17 +51,21 @@ public class CombatEncounter {
                 put(2, player.gun.a2);
                 put(3, player.gun.a3);
                 put(4, player.gun.a4);
-                put(5, new PlayerAbility("Bandage Up", new int[] { 10, 15 }, 0, 2));
-                put(6, new PlayerAbility("Hunker Down", null, player.armour.armourAmount, 4));
+                put(5, new PlayerAbility("Bandage Up", new int[] { 10, 15 }, 0, 2, 3));
+                put(6, new PlayerAbility("Hunker Down", null, player.armour.armourAmount, 4, 5));
             }
         };
 
-        enemyNames = new HashMap<>() {{
-
-            put(1, "Grunt");
-            put(2, "");
-
-        }};
+        abilityInitialPP = new HashMap<>() {
+            {
+                put(1, player.gun.a1.getLimit());
+                put(2, player.gun.a2.getLimit());
+                put(3, player.gun.a3.getLimit());
+                put(4, player.gun.a4.getLimit());
+                put(5, abilityID.get(5).getLimit());
+                put(6, abilityID.get(6).getLimit());
+            }
+        };
 
         // The initial action points of the player.
         actionPoints = 10;
@@ -107,6 +111,18 @@ public class CombatEncounter {
     }
 
     /**
+     * Updates the enemy's currentHealthState enum state.
+     */
+    private void updateEnemyHealthState() {
+        // Updating enemy healthStates
+        for (int i = 1; i < 7; i++) {
+            if (targetID.get(i) != null) {
+                targetID.get(i).currentHealthState = targetID.get(i).setHealthState();
+            }
+        }
+    }
+
+    /**
      * Uses the appropriate player gun ability depending on which button is pressed
      * in
      * the UI.
@@ -115,6 +131,7 @@ public class CombatEncounter {
      */
     void usePlayerGunAbility(int playerAbilityNumber) {
         actionPoints -= abilityID.get(playerAbilityNumber).getAbilityCost();
+        abilityID.get(playerAbilityNumber).currentTurnPP -= 1;
         int dmg = abilityID.get(playerAbilityNumber).useAbility();
 
         // Goes through all of the enemies in the combat and applies damage to them.
@@ -124,6 +141,7 @@ public class CombatEncounter {
         }
 
         // Refreshes the HP of the enemies on the screen.
+        updateEnemyHealthState();
         ui.refreshGUI();
     }
 
@@ -135,27 +153,32 @@ public class CombatEncounter {
      */
     void targetedAbility(int playerAbilityNumber, Enemy target) {
         actionPoints -= abilityID.get(playerAbilityNumber).getAbilityCost();
+        abilityID.get(playerAbilityNumber).currentTurnPP -= 1;
         target.hp -= abilityID.get(playerAbilityNumber).useAbility();
+        updateEnemyHealthState();
         ui.refreshGUI();
     }
 
     /**
      * Use player support ability
+     * 
      * @param playerAbilityNumber the support ability ID
      */
     void useSupportAbility(int playerAbilityNumber) {
         actionPoints -= abilityID.get(playerAbilityNumber).getAbilityCost();
+        abilityID.get(playerAbilityNumber).currentTurnPP -= 1;
         switch (playerAbilityNumber) {
             // Healing
             case (5):
-                player.hp += r.nextInt(abilityID.get(playerAbilityNumber).getHealRange()[1]) + abilityID.get(playerAbilityNumber).getHealRange()[0];
+                player.hp += r.nextInt(abilityID.get(playerAbilityNumber).getHealRange()[1])
+                        + abilityID.get(playerAbilityNumber).getHealRange()[0];
                 break;
             // Armour / Shield
             case (6):
                 playerShield += abilityID.get(playerAbilityNumber).getArmourAmount();
                 break;
         }
-
+        updateEnemyHealthState();
         ui.refreshGUI();
     }
 
@@ -187,10 +210,16 @@ public class CombatEncounter {
             if (targetID.get(i) != null) {
                 if (targetID.get(i).isActive == true) {
                     enemyTurn();
-                    ui.refreshGUI();
                 }
             }
         }
-        shield = 0;
+
+        // Resetting each ability PP to their default settings.
+        for (int i = 1; i < 6; i++) {
+            abilityID.get(i).currentTurnPP = abilityID.get(i).getLimit();
+        }
+        playerShield = 0;
+
+        ui.refreshGUI();
     }
 }

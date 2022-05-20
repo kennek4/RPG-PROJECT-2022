@@ -10,9 +10,11 @@ public class PlayerAbility {
     // Variables
     private String abilityName;
     private boolean needsTarget;
-    private int abilityBaseDMG, abilityCost, numberOfActions, turnLimit, armourAmount;
+    private int abilityBaseDMG, abilityCost, numberOfActions, armourAmount, turnLimit;
     private double acc;
     private int[] healRange;
+
+    int currentTurnPP;
 
     /**
      * Constructor for creating a new ability for a gun.
@@ -21,7 +23,8 @@ public class PlayerAbility {
      * @param needsTarget    if the ability requires a target to function.
      * @param abilityBaseDMG the base damage dealt for the ability.
      * @param abilityCost    the action cost of the ability.
-     * @param turnLimit      the number of times the ability can be used in one turn.
+     * @param turnLimit      the number of times the ability can be used in one
+     *                       turn.
      */
     public PlayerAbility(String abilityName, boolean needsTarget, int abilityBaseDMG, int abilityCost,
             int numberOfActions, double acc, int turnLimit) {
@@ -32,6 +35,7 @@ public class PlayerAbility {
         this.numberOfActions = numberOfActions;
         this.turnLimit = turnLimit;
         this.acc = acc;
+        this.currentTurnPP = turnLimit;
     }
 
     /**
@@ -42,11 +46,13 @@ public class PlayerAbility {
      * @param armourAmount
      * @param abilityCost
      */
-    public PlayerAbility(String abilityName, int[] healRange, int armourAmount, int abilityCost) {
+    public PlayerAbility(String abilityName, int[] healRange, int armourAmount, int abilityCost, int turnLimit) {
         this.abilityName = abilityName;
         this.healRange = healRange;
         this.armourAmount = armourAmount;
         this.abilityCost = abilityCost;
+        this.turnLimit = turnLimit;
+        this.currentTurnPP = turnLimit;
     }
 
     /**
@@ -73,6 +79,25 @@ public class PlayerAbility {
         } else {
             return abilityBaseDMG;
         }
+    }
+
+    /**
+     * Returns the current PP of the ability during a turn
+     * 
+     * @return currentTurnPP
+     */
+    public int getCurrentPP() {
+        return currentTurnPP;
+    }
+
+    /**
+     * A method that returns the amount of times the ability can be called in one
+     * turn.
+     * 
+     * @return turnLimit
+     */
+    public int getLimit() {
+        return turnLimit;
     }
 
     /**
