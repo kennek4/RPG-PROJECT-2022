@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import CombatFiles.Enemy.actionState;
+
 /**
  * The class that handles all combat logic between enemies and the player /
  * user.
@@ -186,19 +188,39 @@ public class CombatEncounter {
      * A method that is called when the player's turn is finished.
      * This method deals with the combat logic for enemies.
      */
-    void enemyTurn() {
+    void enemyTurn(int i) {
 
-        // Runs through all the enemies and sees if they are capable of attacking or not
-        // by
-        // checking the isActive property.
-        for (int i = 1; i < 4; i++) {
-            if (targetID.get(i) != null) {
-                if (targetID.get(i).isActive == true) {
-                    int dmg = targetID.get(i).attack();
-                    player.hp -= dmg;
+        /**
+         * 
+         * 
+         * 
+         * 
+         * FIX THIS / IS WONKY
+         * 
+         * 
+         * 
+         */
+        if (targetID.get(i) != null) {
+            if (targetID.get(i).isActive == true) {
+                if (targetID.get(i).intention == actionState.ATTACK) {
+                    int dmg = targetID.get(i).attackTurn.poll();
+                    System.out.println("Dmg: " + dmg);
+                    targetID.get(i).rollActions();
+                    player.hp -= dmg * targetID.get(i).actions;
+                } else if (targetID.get(i).intention == actionState.HEALING) {
+                    if (targetID.get(i).hp + targetID.get(i).healTurn.poll() > 100) {
+                        System.out.println("They would shield here.");
+                    } else {
+                        targetID.get(i).hp += targetID.get(i).healTurn.poll();
+                        targetID.get(i).currentHealthState = targetID.get(i).setHealthState();
+                    }
                 }
+                targetID.get(i).nextTurn();
+
             }
         }
+
+        ui.refreshGUI();
     }
 
     /**
@@ -209,7 +231,7 @@ public class CombatEncounter {
         for (int i = 1; i < 4; i++) {
             if (targetID.get(i) != null) {
                 if (targetID.get(i).isActive == true) {
-                    enemyTurn();
+                    enemyTurn(i);
                 }
             }
         }

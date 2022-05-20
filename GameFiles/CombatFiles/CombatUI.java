@@ -16,6 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
+import CombatFiles.Enemy.actionState;
+
 /**
  * Class responsible for the GUI during combat.
  */
@@ -27,6 +29,7 @@ public class CombatUI {
 
     // IMAGEs
     final ImageIcon ATK_ICON = new ImageIcon("GameFiles\\CombatFiles\\CombatImages\\attack_icon.png");
+    final ImageIcon HEAL_ICON = new ImageIcon("GameFiles\\CombatFiles\\CombatImages\\heal_icon.png");
     final ImageIcon ENEMY = new ImageIcon("GameFiles\\CombatFiles\\CombatImages\\enemy_test.png");
 
     // LEFT SIDE TOP HALF VARIABLES
@@ -52,6 +55,7 @@ public class CombatUI {
     HashMap<Integer, JButton> abilityButtonID;
     HashMap<Integer, JLabel> abilityLimits;
     HashMap<Integer, JButton> targetButtons;
+    HashMap<Integer, JLabel> intentions;
 
     JButton targetButton1;
     JButton targetButton2;
@@ -577,6 +581,14 @@ public class CombatUI {
         c.gridy = 2;
         enemy1.add(enemy1HealthBar, c);
 
+        intentions = new HashMap<>() {
+            {
+                put(1, enemy1Intention);
+                put(2, enemy2Intention);
+                put(3, enemy3Intention);
+            }
+        };
+
         c.insets = new Insets(5, 10, 5, 10);
 
         /**
@@ -688,6 +700,16 @@ public class CombatUI {
                 abilityButtonID.get(i).setEnabled(false);
             }
             abilityLimits.get(i).setText(String.format("%d", combatEncounter.abilityID.get(i).currentTurnPP));
+        }
+
+        for (int i = 1; i < 4; i++) {
+            if (combatEncounter.targetID.get(i) != null) {
+                if (combatEncounter.targetID.get(i).intention == actionState.ATTACK) {
+                    intentions.get(i).setIcon(ATK_ICON);
+                } else {
+                    intentions.get(i).setIcon(HEAL_ICON);
+                }
+            }
         }
 
         // If enemy1 exists

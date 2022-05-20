@@ -2,12 +2,14 @@ package CombatFiles;
 
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Queue;
+import java.util.LinkedList;
 
 public class Enemy {
 
 	Random r = new Random();
 
-	enum healthState {
+	public enum healthState {
 
 		HEALTHY {
 			@Override
@@ -70,16 +72,15 @@ public class Enemy {
 		abstract int chanceToAttack();
 	}
 
-	enum actionState {
+	public enum actionState {
 		ATTACK,
 		HEALING;
 	}
 
-	healthState currentHealthState;
-	actionState intention;
+	public healthState currentHealthState;
 
 	// Stats
-	int hp, dexterity, enemyTier;
+	int hp, dexterity, enemyTier, actions;
 	Armour armour;
 	String name;
 
@@ -117,8 +118,6 @@ public class Enemy {
 		}
 	};
 
-	int[] turnData = { 0, 0 };
-
 	/**
 	 * Sets the enum state of the enemy depending on the current health of the enemy
 	 * 
@@ -139,6 +138,12 @@ public class Enemy {
 		return healthState.DEAD;
 	}
 
+	Queue<Integer> attackTurn;
+	Queue<Integer> healTurn;
+	Queue<actionState> nextTurnIntention;
+
+	public actionState intention;
+
 	/**
 	 * Enemy class constructor
 	 * 
@@ -156,34 +161,63 @@ public class Enemy {
 		this.hp = hp;
 		this.armour = armour;
 
-		this.isActive = true;
 		this.dmgBounds = enemyTierMaxDMG.get(enemyTier);
+		attackTurn = new LinkedList<>() {
+			{
+				offer(r.nextInt(dmgBounds) + 1);
+			}
+		};
+		System.out.println("attackTurn: " + attackTurn);
+
+		healTurn = new LinkedList<>() {
+			{
+				offer(r.nextInt(5) + 1);
+			}
+		};
+		nextTurnIntention = new LinkedList<>() {
+			{
+				offer(actionState.ATTACK);
+			}
+		};
+		this.intention = nextTurnIntention.poll();
+
+		this.isActive = true;
 		this.currentHealthState = setHealthState();
 	}
 
 	/**
 	 * Enemy attack method, called when enemies need to attack the player.
 	 */
-	int cycleAttack() {
-		int actions = r.nextInt(3) + 1;
-		int dmg = (r.nextInt(dmgBounds)) + 1;
+	void attack() {
 
-		turnData[0] = dmg;
-		turnData[1] = actions;
-
-		return turnData[0] * turnData[1];
+		// Rolls for the next attack
+		attackTurn.offer(r.nextInt(dmgBounds) + 1);
 
 	}
 
-	int heal() {
+	void heal() {
+
+		// Rolls for next heal
+		healTurn.offer(r.nextInt(10) + 1);
 
 	}
 
-	int turn() {
-		int roll = r.nextInt(100);
-		if (roll < currentHealthState.chanceToAttack()) {
-			return cycleAttack();
+	void nextTurn() {
+		if ((r.nextInt(100) + 1) < currentHealthState.chanceToAttack()) {
+			nextTurnIntention.offer(actionState.ATTACK);
+			attack();
+		} else {
+			nextTurnIntention.offer(actionState.HEALING);
+			heal();
 		}
-		return heal();
+		intention = nextTurnIntention.poll();
+	}
+
+	void shieldSelf() {
+
+	}
+
+	void rollActions() {
+		actions = r.nextInt(3) + 1;
 	}
 }
