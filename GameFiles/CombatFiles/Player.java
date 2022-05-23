@@ -5,7 +5,7 @@ package CombatFiles;
  */
 public class Player {
 
-	int hp, perception, organization, dexterity, shooting;
+	int hp, perception, organization, dexterity, shooting, shield;
 	Armour armour;
 	Gun gun;
 
@@ -29,6 +29,7 @@ public class Player {
 
 		this.hp = hp;
 		this.armour = armour;
+		this.shield = 0;
 
 	}
 }

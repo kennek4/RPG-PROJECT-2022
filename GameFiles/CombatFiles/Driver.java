@@ -8,7 +8,7 @@ public class Driver {
 
     public static void main(String[] args) {
         // Random r = new Random();
-        Armour class4 = new Armour(4, 20);
+        Armour class4 = new Armour(4, 12);
 
         Player player = new Player(100, 6, 4, 6, 6, class4);
         Gun gun = new Gun(new PlayerAbility("Spray & Pray", false, 5, 2, 5, 55, 2),
@@ -17,11 +17,11 @@ public class Driver {
                 new PlayerAbility("Single Shot", true, 13, 1, 1, 85, 5));
         player.gun = gun;
 
-        CombatEncounter cb = new CombatEncounter(player, 2);
+        CombatEncounter cb = new CombatEncounter(player, 1);
         CombatUI ui = new CombatUI(cb);
 
         gun.ui = ui;
         cb.ui = ui;
 
     }
-}
+}  

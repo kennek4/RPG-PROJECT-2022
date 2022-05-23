@@ -40,6 +40,7 @@ public class CombatUI {
     JLabel gunName;
     JPanel gunIMG;
     JProgressBar healthBar;
+    JProgressBar shieldBar;
 
     // LEFT SIDE BOTTOM HALF VARIABLES
     JPanel pBotHalfPanel;
@@ -100,7 +101,7 @@ public class CombatUI {
     JLabel enemy3Intention;
     JLabel enemy1Image;
     JLabel enemy2Image;
-    JLabel enemy3Image;
+    JLabel enemy3Image; 
 
     JPanel botHalfPanel;
     JLabel label;
@@ -188,16 +189,31 @@ public class CombatUI {
         pTopHalfPanel.add(gunIMG, c);
 
         healthBar = new JProgressBar();
+        healthBar.setStringPainted(true);
         healthBar.setMaximum(100);
         healthBar.setValue(combatEncounter.player.hp);
-        healthBar.setForeground(Color.GREEN);
+        healthBar.setForeground(Color.GRAY);
         healthBar.setBackground(Color.RED);
         healthBar.setPreferredSize(new Dimension(healthBar.getWidth() + 15, 25));
         c.gridx = 0;
         c.gridy = 2;
         c.gridheight = 1;
-        c.gridwidth = 3;
+        c.gridwidth = 2;
         pTopHalfPanel.add(healthBar, c);
+
+        shieldBar = new JProgressBar();
+        shieldBar.setStringPainted(true);
+        shieldBar.setMaximum(50);
+        shieldBar.setPreferredSize(new Dimension(shieldBar.getWidth() - 15, 25));
+        shieldBar.setForeground(Color.BLUE);
+        shieldBar.setBackground(Color.GRAY);
+        c.gridx = 2;
+        c.gridy = 2;
+        c.gridwidth = 1;
+        c.gridheight = 1;
+        pTopHalfPanel.add(shieldBar, c);
+
+
 
         // Left side bottom half
         pBotHalfPanel = new JPanel();
@@ -274,6 +290,7 @@ public class CombatUI {
 
         abilityBox3 = new JPanel();
         abilityBox3.setBackground(Color.CYAN);
+        if (combatEncounter.player.gun.a4.needsTarget() == true) {
         abilityBox3.setLayout(new GridBagLayout());
         abilityButton3 = new JButton(combatEncounter.player.gun.a3.getAbilityName());
         abilityButton3.addActionListener(a -> {
@@ -307,12 +324,10 @@ public class CombatUI {
         abilityButton4 = new JButton(combatEncounter.player.gun.a4.getAbilityName());
         abilityButton4.addActionListener(a -> {
             if (combatEncounter.abilityID.get(4).getCurrentPP() > 0) {
-                if (combatEncounter.player.gun.a4.needsTarget() == true) {
-                    playerAbilityNumber = 4;
-                    targetToggle();
-                } else {
-                    combatEncounter.usePlayerGunAbility(4);
-                }
+                playerAbilityNumber = 4;
+                targetToggle();
+            } else {
+                combatEncounter.usePlayerGunAbility(4);
             }
         });
         abilityButton4.setPreferredSize(new Dimension(200, 100));
@@ -375,7 +390,7 @@ public class CombatUI {
         abilityBox6.add(abilityLimit6, c);
         pBotHalfPanel.add(abilityBox6);
 
-        abilityButtonID = new HashMap<>() {
+        abilityButtonID = new HashMap<Integer, JButton>() {
             {
                 put(1, abilityButton1);
                 put(2, abilityButton2);
@@ -386,7 +401,7 @@ public class CombatUI {
             }
         };
 
-        abilityLimits = new HashMap<>() {
+        abilityLimits = new HashMap<Integer, JLabel>() {
             {
                 put(1, abilityLimit1);
                 put(2, abilityLimit2);
@@ -480,6 +495,7 @@ public class CombatUI {
             enemyBox.add(enemy2, c);
 
             enemy2Intention = new JLabel(ATK_ICON);
+            enemy2Intention.setForeground(WHITE);
             enemy2Intention.setPreferredSize(new Dimension(32, 32));
             c.insets = new Insets(5, 5, 5, 5);
             c.gridx = 1;
@@ -517,6 +533,7 @@ public class CombatUI {
             enemyBox.add(enemy3, c);
 
             enemy3Intention = new JLabel();
+            enemy3Intention.setForeground(WHITE);
             enemy3Intention.setIcon(ATK_ICON);
             enemy3Intention.setPreferredSize(new Dimension(32, 32));
             c.insets = new Insets(5, 5, 10, 5);
@@ -555,7 +572,7 @@ public class CombatUI {
         enemyBox.add(enemy1, c);
 
         enemy1Intention = new JLabel(ATK_ICON);
-        enemy1Intention.setText("3x3");
+        enemy1Intention.setForeground(WHITE);
         enemy1Intention.setPreferredSize(new Dimension(32, 32));
         enemy1Intention.setAlignmentX(JLabel.CENTER_ALIGNMENT);
         enemy1Intention.setVisible(true);
@@ -581,7 +598,7 @@ public class CombatUI {
         c.gridy = 2;
         enemy1.add(enemy1HealthBar, c);
 
-        intentions = new HashMap<>() {
+        intentions = new HashMap<Integer, JLabel>() {
             {
                 put(1, enemy1Intention);
                 put(2, enemy2Intention);
@@ -641,7 +658,7 @@ public class CombatUI {
 
         }
 
-        targetButtons = new HashMap<>() {
+        targetButtons = new HashMap<Integer, JButton>() {
             {
                 put(1, targetButton1);
                 put(2, targetButton2);
@@ -651,6 +668,7 @@ public class CombatUI {
 
         window.pack();
         window.setVisible(true);
+    }
     }
 
     /**
@@ -681,6 +699,8 @@ public class CombatUI {
     public void refreshGUI() {
 
         healthBar.setValue(combatEncounter.player.hp);
+        shieldBar.setMaximum(36);
+        shieldBar.setValue(combatEncounter.player.shield);
 
         // Refreshes the actions points to its updated values.
         actionPointText.setText(String.format("%d", combatEncounter.actionPoints));
@@ -706,12 +726,14 @@ public class CombatUI {
             if (combatEncounter.targetID.get(i) != null) {
                 if (combatEncounter.targetID.get(i).intention == actionState.ATTACK) {
                     intentions.get(i).setIcon(ATK_ICON);
+                    intentions.get(i).setText(String.format("%d x %d", combatEncounter.targetID.get(i).attackTurn.peek(), combatEncounter.targetID.get(i).actions));
                 } else {
                     intentions.get(i).setIcon(HEAL_ICON);
+                    intentions.get(i).setText(String.format("%d x %d", combatEncounter.targetID.get(i).healTurn.peek(), combatEncounter.targetID.get(i).actions));
                 }
             }
         }
-
+        
         // If enemy1 exists
         if (combatEncounter.enemy1 != null) {
             // If enemy1's HP is equal or below zero, disable it. This in turn "kills the

@@ -74,13 +74,14 @@ public class Enemy {
 
 	public enum actionState {
 		ATTACK,
-		HEALING;
+		HEALING,
+		SHIELD;
 	}
 
 	public healthState currentHealthState;
 
 	// Stats
-	int hp, dexterity, enemyTier, actions;
+	int hp, dexterity, enemyTier, actions, shield;
 	Armour armour;
 	String name;
 
@@ -140,6 +141,7 @@ public class Enemy {
 
 	Queue<Integer> attackTurn;
 	Queue<Integer> healTurn;
+	Queue<Integer> shieldTurn;
 	Queue<actionState> nextTurnIntention;
 
 	public actionState intention;
@@ -167,6 +169,7 @@ public class Enemy {
 				offer(r.nextInt(dmgBounds) + 1);
 			}
 		};
+
 		System.out.println("attackTurn: " + attackTurn);
 
 		healTurn = new LinkedList<>() {
@@ -174,15 +177,23 @@ public class Enemy {
 				offer(r.nextInt(5) + 1);
 			}
 		};
+
 		nextTurnIntention = new LinkedList<>() {
 			{
 				offer(actionState.ATTACK);
+			}
+		};
+
+		shieldTurn = new LinkedList<>() {
+			{
+				offer(r.nextInt(10) + 1);
 			}
 		};
 		this.intention = nextTurnIntention.poll();
 
 		this.isActive = true;
 		this.currentHealthState = setHealthState();
+		this.shield = 0;
 	}
 
 	/**
@@ -202,19 +213,25 @@ public class Enemy {
 
 	}
 
+	void shield() {
+
+		// Rolls for the next shield.
+		shieldTurn.offer(r.nextInt(10) + 1);
+		System.out.println(shieldTurn);
+	}
+
 	void nextTurn() {
 		if ((r.nextInt(100) + 1) < currentHealthState.chanceToAttack()) {
 			nextTurnIntention.offer(actionState.ATTACK);
 			attack();
-		} else {
+		} else if (r.nextInt(100) + 1 < currentHealthState.chanceToAttack()){
 			nextTurnIntention.offer(actionState.HEALING);
 			heal();
+		} else {
+			nextTurnIntention.offer(actionState.SHIELD);
+			shield();
 		}
 		intention = nextTurnIntention.poll();
-	}
-
-	void shieldSelf() {
-
 	}
 
 	void rollActions() {

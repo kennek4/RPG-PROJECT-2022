@@ -19,7 +19,7 @@ public class CombatEncounter {
     // Player related variables
     Player player;
     Enemy playersTarget;
-    int actionPoints, playerShield;
+    int actionPoints;
 
     // Enemy variables
     Enemy enemy1;
@@ -44,6 +44,7 @@ public class CombatEncounter {
      */
     public CombatEncounter(Player player, int numberOfEnemies) {
         this.player = player;
+        this.player.shield = 0;
         this.numberOfEnemies = numberOfEnemies;
 
         // Mapping the player skills to a HashMap for easier access later on.
@@ -54,7 +55,7 @@ public class CombatEncounter {
                 put(3, player.gun.a3);
                 put(4, player.gun.a4);
                 put(5, new PlayerAbility("Bandage Up", new int[] { 10, 15 }, 0, 2, 3));
-                put(6, new PlayerAbility("Hunker Down", null, player.armour.armourAmount, 4, 5));
+                put(6, new PlayerAbility("Hunker Down", null, player.armour.armourAmount, 5, 3));
             }
         };
 
@@ -177,12 +178,13 @@ public class CombatEncounter {
                 break;
             // Armour / Shield
             case (6):
-                playerShield += abilityID.get(playerAbilityNumber).getArmourAmount();
+                player.shield += abilityID.get(playerAbilityNumber).getArmourAmount();
                 break;
         }
         updateEnemyHealthState();
         ui.refreshGUI();
     }
+                 
 
     /**
      * A method that is called when the player's turn is finished.
@@ -190,37 +192,31 @@ public class CombatEncounter {
      */
     void enemyTurn(int i) {
 
-        /**
-         * 
-         * 
-         * 
-         * 
-         * FIX THIS / IS WONKY AS OF 12:00AM
-         * 
-         * 
-         * 
-         */
-        if (targetID.get(i) != null) {
+        if (targetID.get(i) != null) {  
             if (targetID.get(i).isActive == true) {
                 if (targetID.get(i).intention == actionState.ATTACK) {
                     int dmg = targetID.get(i).attackTurn.poll();
                     System.out.println("Dmg: " + dmg);
+                    int actions = targetID.get(i).actions;      
                     targetID.get(i).rollActions();
-                    player.hp -= dmg * targetID.get(i).actions;
-                } else if (targetID.get(i).intention == actionState.HEALING) {
-                    if (targetID.get(i).hp + targetID.get(i).healTurn.poll() > 100) {
-                        System.out.println("They would shield here.");
+                    ui.refreshGUI();
+                    if (player.shield > (dmg * actions)) {
+                        player.shield -= dmg * actions;
                     } else {
-                        targetID.get(i).hp += targetID.get(i).healTurn.poll();
-                        targetID.get(i).currentHealthState = targetID.get(i).setHealthState();
+                        player.hp -= ((dmg * actions) - player.shield);
                     }
+                } else if (targetID.get(i).intention == actionState.HEALING) {
+                    targetID.get(i).hp += targetID.get(i).healTurn.poll();
+                    targetID.get(i).currentHealthState = targetID.get(i).setHealthState();
+                } else if (targetID.get(i).intention == actionState.SHIELD) {
+                    System.out.println("Shield: " + targetID.get(i).shield);
+                    targetID.get(i).shield = targetID.get(i).shieldTurn.poll();
+                    System.out.println("Shield: " + targetID.get(i).shield);
                 }
                 targetID.get(i).nextTurn();
-
             }
         }
 
-        ui.refreshGUI();
     }
 
     /**
@@ -240,7 +236,7 @@ public class CombatEncounter {
         for (int i = 1; i < 6; i++) {
             abilityID.get(i).currentTurnPP = abilityID.get(i).getLimit();
         }
-        playerShield = 0;
+        player.shield = 0;
 
         ui.refreshGUI();
     }
