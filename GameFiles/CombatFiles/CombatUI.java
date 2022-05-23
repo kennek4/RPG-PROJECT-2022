@@ -30,6 +30,7 @@ public class CombatUI {
     // IMAGEs
     final ImageIcon ATK_ICON = new ImageIcon("GameFiles\\CombatFiles\\CombatImages\\attack_icon.png");
     final ImageIcon HEAL_ICON = new ImageIcon("GameFiles\\CombatFiles\\CombatImages\\heal_icon.png");
+    final ImageIcon SHIELD_ICON = new ImageIcon("GameFiles\\CombatFiles\\CombatImages\\shield_icon.png");
     final ImageIcon ENEMY = new ImageIcon("GameFiles\\CombatFiles\\CombatImages\\enemy_test.png");
 
     // LEFT SIDE TOP HALF VARIABLES
@@ -77,6 +78,13 @@ public class CombatUI {
     JLabel abilityLimit5;
     JLabel abilityLimit6;
 
+    JLabel abilityInfo1;
+    JLabel abilityInfo2;
+    JLabel abilityInfo3;
+    JLabel abilityInfo4;
+    JLabel abilityInfo5;
+    JLabel abilityInfo6;
+
     // RIGHT SIDE
     JPanel environmentInfoBox;
     JPanel envInfoBoxImg;
@@ -101,7 +109,7 @@ public class CombatUI {
     JLabel enemy3Intention;
     JLabel enemy1Image;
     JLabel enemy2Image;
-    JLabel enemy3Image; 
+    JLabel enemy3Image;
 
     JPanel botHalfPanel;
     JLabel label;
@@ -213,8 +221,6 @@ public class CombatUI {
         c.gridheight = 1;
         pTopHalfPanel.add(shieldBar, c);
 
-
-
         // Left side bottom half
         pBotHalfPanel = new JPanel();
         pBotHalfPanel.setBackground(Color.WHITE);
@@ -291,384 +297,384 @@ public class CombatUI {
         abilityBox3 = new JPanel();
         abilityBox3.setBackground(Color.CYAN);
         if (combatEncounter.player.gun.a4.needsTarget() == true) {
-        abilityBox3.setLayout(new GridBagLayout());
-        abilityButton3 = new JButton(combatEncounter.player.gun.a3.getAbilityName());
-        abilityButton3.addActionListener(a -> {
-            if (combatEncounter.abilityID.get(3).getCurrentPP() > 0) {
-                if (combatEncounter.player.gun.a3.needsTarget() == true) {
-                    playerAbilityNumber = 3;
+            abilityBox3.setLayout(new GridBagLayout());
+            abilityButton3 = new JButton(combatEncounter.player.gun.a3.getAbilityName());
+            abilityButton3.addActionListener(a -> {
+                if (combatEncounter.abilityID.get(3).getCurrentPP() > 0) {
+                    if (combatEncounter.player.gun.a3.needsTarget() == true) {
+                        playerAbilityNumber = 3;
+                        targetToggle();
+                    } else {
+                        combatEncounter.usePlayerGunAbility(3);
+                    }
+                }
+            });
+            abilityButton3.setPreferredSize(new Dimension(200, 100));
+            c.gridx = 1;
+            c.gridy = 1;
+            c.gridheight = 1;
+            c.gridwidth = 1;
+            abilityBox3.add(abilityButton3, c);
+            abilityLimit3 = new JLabel();
+            abilityLimit3.setText(String.format("%d", combatEncounter.abilityID.get(3).getLimit()));
+            c.gridx = 2;
+            c.gridy = 2;
+            c.gridheight = 1;
+            c.gridwidth = 1;
+            abilityBox3.add(abilityLimit3, c);
+            pBotHalfPanel.add(abilityBox3);
+
+            abilityBox4 = new JPanel();
+            abilityBox4.setLayout(new GridBagLayout());
+            abilityBox4.setBackground(Color.CYAN);
+            abilityButton4 = new JButton(combatEncounter.player.gun.a4.getAbilityName());
+            abilityButton4.addActionListener(a -> {
+                if (combatEncounter.abilityID.get(4).getCurrentPP() > 0) {
+                    playerAbilityNumber = 4;
                     targetToggle();
                 } else {
-                    combatEncounter.usePlayerGunAbility(3);
+                    combatEncounter.usePlayerGunAbility(4);
                 }
-            }
-        });
-        abilityButton3.setPreferredSize(new Dimension(200, 100));
-        c.gridx = 1;
-        c.gridy = 1;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        abilityBox3.add(abilityButton3, c);
-        abilityLimit3 = new JLabel();
-        abilityLimit3.setText(String.format("%d", combatEncounter.abilityID.get(3).getLimit()));
-        c.gridx = 2;
-        c.gridy = 2;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        abilityBox3.add(abilityLimit3, c);
-        pBotHalfPanel.add(abilityBox3);
-
-        abilityBox4 = new JPanel();
-        abilityBox4.setLayout(new GridBagLayout());
-        abilityBox4.setBackground(Color.CYAN);
-        abilityButton4 = new JButton(combatEncounter.player.gun.a4.getAbilityName());
-        abilityButton4.addActionListener(a -> {
-            if (combatEncounter.abilityID.get(4).getCurrentPP() > 0) {
-                playerAbilityNumber = 4;
-                targetToggle();
-            } else {
-                combatEncounter.usePlayerGunAbility(4);
-            }
-        });
-        abilityButton4.setPreferredSize(new Dimension(200, 100));
-        c.gridx = 1;
-        c.gridy = 1;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        abilityBox4.add(abilityButton4, c);
-        abilityLimit4 = new JLabel();
-        abilityLimit4.setText(String.format("%d", combatEncounter.abilityID.get(4).getLimit()));
-        c.gridx = 2;
-        c.gridy = 2;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        abilityBox4.add(abilityLimit4, c);
-        pBotHalfPanel.add(abilityBox4);
-
-        abilityBox5 = new JPanel();
-        abilityBox5.setLayout(new GridBagLayout());
-        abilityBox5.setBackground(Color.CYAN);
-        abilityButton5 = new JButton(combatEncounter.abilityID.get(5).getAbilityName());
-        abilityButton5.addActionListener(a -> {
-            combatEncounter.useSupportAbility(5);
-        });
-
-        abilityButton5.setPreferredSize(new Dimension(200, 100));
-        c.gridx = 1;
-        c.gridy = 1;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        abilityBox5.add(abilityButton5, c);
-        abilityLimit5 = new JLabel();
-        abilityLimit5.setText(String.format("%d", combatEncounter.abilityID.get(5).getLimit()));
-        c.gridx = 2;
-        c.gridy = 2;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        abilityBox5.add(abilityLimit5, c);
-        pBotHalfPanel.add(abilityBox5);
-
-        abilityBox6 = new JPanel();
-        abilityBox6.setLayout(new GridBagLayout());
-        abilityBox6.setBackground(Color.CYAN);
-        abilityButton6 = new JButton(combatEncounter.abilityID.get(6).getAbilityName());
-        abilityButton6.addActionListener(a -> {
-            combatEncounter.useSupportAbility(6);
-        });
-        abilityButton6.setPreferredSize(new Dimension(200, 100));
-        c.gridx = 1;
-        c.gridy = 1;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        abilityBox6.add(abilityButton6, c);
-        abilityLimit6 = new JLabel();
-        abilityLimit6.setText(String.format("%d", combatEncounter.abilityID.get(6).getLimit()));
-        c.gridx = 2;
-        c.gridy = 2;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        abilityBox6.add(abilityLimit6, c);
-        pBotHalfPanel.add(abilityBox6);
-
-        abilityButtonID = new HashMap<Integer, JButton>() {
-            {
-                put(1, abilityButton1);
-                put(2, abilityButton2);
-                put(3, abilityButton3);
-                put(4, abilityButton4);
-                put(5, abilityButton5);
-                put(6, abilityButton6);
-            }
-        };
-
-        abilityLimits = new HashMap<Integer, JLabel>() {
-            {
-                put(1, abilityLimit1);
-                put(2, abilityLimit2);
-                put(3, abilityLimit3);
-                put(4, abilityLimit4);
-                put(5, abilityLimit5);
-                put(6, abilityLimit6);
-            }
-        };
-
-        /**
-         * Panel for the Right Side of the GUI
-         */
-        environmentInfoBox = new JPanel();
-        environmentInfoBox.setBackground(BLACK);
-        environmentInfoBox.setLayout(new GridBagLayout());
-        environmentInfoBox.setPreferredSize(new Dimension(1000, 800));
-        c.gridx = 1;
-        c.gridy = 0;
-        c.gridwidth = 2;
-        c.gridheight = 2;
-        c.insets = new Insets(10, 15, 10, 15);
-        window.add(environmentInfoBox, c);
-
-        // BACKGROUND IMG
-        envInfoBoxImg = new JPanel();
-        envInfoBoxImg.setLayout(new GridBagLayout());
-        envInfoBoxImg.setPreferredSize(new Dimension(975, 775));
-        envInfoBoxImg.setBackground(BLACK);
-        // c.gridx = 1;
-        // c.gridy = 1;
-        // c.gridheight = 3;
-        // c.gridwidth = 3;
-        environmentInfoBox.add(envInfoBoxImg);
-
-        c.insets = new Insets(5, 10, 5, 10);
-
-        actionPointBox = new JPanel();
-        actionPointBox.setPreferredSize(new Dimension(250, 150));
-        actionPointBox.setBackground(Color.RED);
-        actionPointBox.setLayout(new GridBagLayout());
-        c.gridx = 0;
-        c.gridy = 0;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        envInfoBoxImg.add(actionPointBox, c);
-
-        actionPointText = new JLabel(String.format("%d", combatEncounter.actionPoints));
-        actionPointText.setPreferredSize(new Dimension(250, 150));
-        actionPointText.setBackground(Color.CYAN);
-        c.gridx = 0;
-        actionPointBox.add(actionPointText, c);
-
-        endTurnButton = new JButton("END TURN");
-        endTurnButton.setPreferredSize(new Dimension(300, 50));
-        endTurnButton.addActionListener(a -> {
-            combatEncounter.endTurn();
-        });
-        c.gridx = 2;
-        envInfoBoxImg.add(endTurnButton, c);
-
-        enemyBox = new JPanel();
-        enemyBox.setLayout(new GridBagLayout());
-        enemyBox.setPreferredSize(new Dimension(900, 475));
-        enemyBox.setBackground(BLACK);
-        c.gridx = 0;
-        c.gridy = 1;
-        c.gridwidth = 3;
-        c.gridheight = 1;
-        envInfoBoxImg.add(enemyBox, c);
-
-        botHalfPanel = new JPanel();
-        botHalfPanel.setLayout(new GridBagLayout());
-        botHalfPanel.setBackground(BLACK);
-        botHalfPanel.setPreferredSize(new Dimension(800, 100));
-        c.gridx = 0;
-        c.gridy = 2;
-        envInfoBoxImg.add(botHalfPanel, c);
-
-        c.fill = GridBagConstraints.HORIZONTAL;
-
-        if (combatEncounter.enemy2 != null) {
-            enemy2 = new JPanel();
-            enemy2.setPreferredSize(new Dimension(250, 400));
-            enemy2.setBackground(BLACK);
-            enemy2.setLayout(new GridBagLayout());
-            c.gridx = 2;
+            });
+            abilityButton4.setPreferredSize(new Dimension(200, 100));
+            c.gridx = 1;
             c.gridy = 1;
             c.gridheight = 1;
             c.gridwidth = 1;
-            enemyBox.add(enemy2, c);
+            abilityBox4.add(abilityButton4, c);
+            abilityLimit4 = new JLabel();
+            abilityLimit4.setText(String.format("%d", combatEncounter.abilityID.get(4).getLimit()));
+            c.gridx = 2;
+            c.gridy = 2;
+            c.gridheight = 1;
+            c.gridwidth = 1;
+            abilityBox4.add(abilityLimit4, c);
+            pBotHalfPanel.add(abilityBox4);
 
-            enemy2Intention = new JLabel(ATK_ICON);
-            enemy2Intention.setForeground(WHITE);
-            enemy2Intention.setPreferredSize(new Dimension(32, 32));
-            c.insets = new Insets(5, 5, 5, 5);
+            abilityBox5 = new JPanel();
+            abilityBox5.setLayout(new GridBagLayout());
+            abilityBox5.setBackground(Color.CYAN);
+            abilityButton5 = new JButton(combatEncounter.abilityID.get(5).getAbilityName());
+            abilityButton5.addActionListener(a -> {
+                combatEncounter.useSupportAbility(5);
+            });
+
+            abilityButton5.setPreferredSize(new Dimension(200, 100));
+            c.gridx = 1;
+            c.gridy = 1;
+            c.gridheight = 1;
+            c.gridwidth = 1;
+            abilityBox5.add(abilityButton5, c);
+            abilityLimit5 = new JLabel();
+            abilityLimit5.setText(String.format("%d", combatEncounter.abilityID.get(5).getLimit()));
+            c.gridx = 2;
+            c.gridy = 2;
+            c.gridheight = 1;
+            c.gridwidth = 1;
+            abilityBox5.add(abilityLimit5, c);
+            pBotHalfPanel.add(abilityBox5);
+
+            abilityBox6 = new JPanel();
+            abilityBox6.setLayout(new GridBagLayout());
+            abilityBox6.setBackground(Color.CYAN);
+            abilityButton6 = new JButton(combatEncounter.abilityID.get(6).getAbilityName());
+            abilityButton6.addActionListener(a -> {
+                combatEncounter.useSupportAbility(6);
+            });
+            abilityButton6.setPreferredSize(new Dimension(200, 100));
+            c.gridx = 1;
+            c.gridy = 1;
+            c.gridheight = 1;
+            c.gridwidth = 1;
+            abilityBox6.add(abilityButton6, c);
+            abilityLimit6 = new JLabel();
+            abilityLimit6.setText(String.format("%d", combatEncounter.abilityID.get(6).getLimit()));
+            c.gridx = 2;
+            c.gridy = 2;
+            c.gridheight = 1;
+            c.gridwidth = 1;
+            abilityBox6.add(abilityLimit6, c);
+            pBotHalfPanel.add(abilityBox6);
+
+            abilityButtonID = new HashMap<Integer, JButton>() {
+                {
+                    put(1, abilityButton1);
+                    put(2, abilityButton2);
+                    put(3, abilityButton3);
+                    put(4, abilityButton4);
+                    put(5, abilityButton5);
+                    put(6, abilityButton6);
+                }
+            };
+
+            abilityLimits = new HashMap<Integer, JLabel>() {
+                {
+                    put(1, abilityLimit1);
+                    put(2, abilityLimit2);
+                    put(3, abilityLimit3);
+                    put(4, abilityLimit4);
+                    put(5, abilityLimit5);
+                    put(6, abilityLimit6);
+                }
+            };
+
+            /**
+             * Panel for the Right Side of the GUI
+             */
+            environmentInfoBox = new JPanel();
+            environmentInfoBox.setBackground(BLACK);
+            environmentInfoBox.setLayout(new GridBagLayout());
+            environmentInfoBox.setPreferredSize(new Dimension(1000, 800));
             c.gridx = 1;
             c.gridy = 0;
-            enemy2.add(enemy2Intention, c);
+            c.gridwidth = 2;
+            c.gridheight = 2;
+            c.insets = new Insets(10, 15, 10, 15);
+            window.add(environmentInfoBox, c);
 
-            enemy2Image = new JLabel(ENEMY);
-            enemy2Image.setSize(new Dimension(100, 175));
-            c.insets = new Insets(5, 5, 5, 5);
-            c.gridx = 1;
-            c.gridy = 1;
-            enemy2.add(enemy2Image, c);
+            // BACKGROUND IMG
+            envInfoBoxImg = new JPanel();
+            envInfoBoxImg.setLayout(new GridBagLayout());
+            envInfoBoxImg.setPreferredSize(new Dimension(975, 775));
+            envInfoBoxImg.setBackground(BLACK);
+            // c.gridx = 1;
+            // c.gridy = 1;
+            // c.gridheight = 3;
+            // c.gridwidth = 3;
+            environmentInfoBox.add(envInfoBoxImg);
 
-            enemy2HealthBar = new JProgressBar();
-            enemy2HealthBar.setPreferredSize(new Dimension(200, 25));
-            enemy2HealthBar.setMaximum(combatEncounter.enemy2.hp);
-            enemy2HealthBar.setValue(combatEncounter.enemy2.hp);
-            enemy2HealthBar.setStringPainted(true);
-            c.insets = new Insets(5, 5, 5, 5);
-            c.gridx = 1;
-            c.gridy = 2;
-            enemy2.add(enemy2HealthBar, c);
+            c.insets = new Insets(5, 10, 5, 10);
 
-        }
-
-        if (combatEncounter.enemy3 != null) {
-            enemy3 = new JPanel();
-            enemy3.setPreferredSize(new Dimension(250, 400));
-            enemy3.setLayout(new GridBagLayout());
-            enemy3.setBackground(BLACK);
+            actionPointBox = new JPanel();
+            actionPointBox.setPreferredSize(new Dimension(250, 150));
+            actionPointBox.setBackground(Color.RED);
+            actionPointBox.setLayout(new GridBagLayout());
             c.gridx = 0;
+            c.gridy = 0;
+            c.gridheight = 1;
+            c.gridwidth = 1;
+            envInfoBoxImg.add(actionPointBox, c);
+
+            actionPointText = new JLabel(String.format("%d", combatEncounter.actionPoints));
+            actionPointText.setPreferredSize(new Dimension(250, 150));
+            actionPointText.setBackground(Color.CYAN);
+            c.gridx = 0;
+            actionPointBox.add(actionPointText, c);
+
+            endTurnButton = new JButton("END TURN");
+            endTurnButton.setPreferredSize(new Dimension(300, 50));
+            endTurnButton.addActionListener(a -> {
+                combatEncounter.endTurn();
+            });
+            c.gridx = 2;
+            envInfoBoxImg.add(endTurnButton, c);
+
+            enemyBox = new JPanel();
+            enemyBox.setLayout(new GridBagLayout());
+            enemyBox.setPreferredSize(new Dimension(900, 475));
+            enemyBox.setBackground(BLACK);
+            c.gridx = 0;
+            c.gridy = 1;
+            c.gridwidth = 3;
+            c.gridheight = 1;
+            envInfoBoxImg.add(enemyBox, c);
+
+            botHalfPanel = new JPanel();
+            botHalfPanel.setLayout(new GridBagLayout());
+            botHalfPanel.setBackground(BLACK);
+            botHalfPanel.setPreferredSize(new Dimension(800, 100));
+            c.gridx = 0;
+            c.gridy = 2;
+            envInfoBoxImg.add(botHalfPanel, c);
+
+            c.fill = GridBagConstraints.HORIZONTAL;
+
+            if (combatEncounter.enemy2 != null) {
+                enemy2 = new JPanel();
+                enemy2.setPreferredSize(new Dimension(250, 400));
+                enemy2.setBackground(BLACK);
+                enemy2.setLayout(new GridBagLayout());
+                c.gridx = 2;
+                c.gridy = 1;
+                c.gridheight = 1;
+                c.gridwidth = 1;
+                enemyBox.add(enemy2, c);
+
+                enemy2Intention = new JLabel(ATK_ICON);
+                enemy2Intention.setForeground(WHITE);
+                enemy2Intention.setPreferredSize(new Dimension(32, 32));
+                c.insets = new Insets(5, 5, 5, 5);
+                c.gridx = 1;
+                c.gridy = 0;
+                enemy2.add(enemy2Intention, c);
+
+                enemy2Image = new JLabel(ENEMY);
+                enemy2Image.setSize(new Dimension(100, 175));
+                c.insets = new Insets(5, 5, 5, 5);
+                c.gridx = 1;
+                c.gridy = 1;
+                enemy2.add(enemy2Image, c);
+
+                enemy2HealthBar = new JProgressBar();
+                enemy2HealthBar.setPreferredSize(new Dimension(200, 25));
+                enemy2HealthBar.setMaximum(combatEncounter.enemy2.hp);
+                enemy2HealthBar.setValue(combatEncounter.enemy2.hp);
+                enemy2HealthBar.setStringPainted(true);
+                c.insets = new Insets(5, 5, 5, 5);
+                c.gridx = 1;
+                c.gridy = 2;
+                enemy2.add(enemy2HealthBar, c);
+
+            }
+
+            if (combatEncounter.enemy3 != null) {
+                enemy3 = new JPanel();
+                enemy3.setPreferredSize(new Dimension(250, 400));
+                enemy3.setLayout(new GridBagLayout());
+                enemy3.setBackground(BLACK);
+                c.gridx = 0;
+                c.gridy = 1;
+                c.gridheight = 1;
+                c.gridwidth = 1;
+                enemyBox.add(enemy3, c);
+
+                enemy3Intention = new JLabel();
+                enemy3Intention.setForeground(WHITE);
+                enemy3Intention.setIcon(ATK_ICON);
+                enemy3Intention.setPreferredSize(new Dimension(32, 32));
+                c.insets = new Insets(5, 5, 10, 5);
+                c.gridx = 1;
+                c.gridy = 0;
+                enemy3.add(enemy3Intention, c);
+
+                enemy3Image = new JLabel(ENEMY);
+                enemy3Image.setSize(new Dimension(100, 175));
+                c.insets = new Insets(5, 5, 5, 5);
+                c.gridx = 1;
+                c.gridy = 1;
+                enemy3.add(enemy3Image, c);
+
+                enemy3HealthBar = new JProgressBar();
+                enemy3HealthBar.setPreferredSize(new Dimension(200, 25));
+                enemy3HealthBar.setMaximum(combatEncounter.enemy3.hp);
+                enemy3HealthBar.setValue(combatEncounter.enemy3.hp);
+                enemy3HealthBar.setStringPainted(true);
+                c.insets = new Insets(5, 5, 5, 5);
+                c.gridx = 1;
+                c.gridy = 2;
+                enemy3.add(enemy3HealthBar, c);
+
+            }
+
+            enemy1 = new JPanel();
+            enemy1.setPreferredSize(new Dimension(250, 400));
+            enemy1.setLayout(new GridBagLayout());
+            enemy1.setBackground(BLACK);
+            c.insets = new Insets(15, 50, 15, 50);
+            c.gridx = 1;
             c.gridy = 1;
             c.gridheight = 1;
             c.gridwidth = 1;
-            enemyBox.add(enemy3, c);
+            enemyBox.add(enemy1, c);
 
-            enemy3Intention = new JLabel();
-            enemy3Intention.setForeground(WHITE);
-            enemy3Intention.setIcon(ATK_ICON);
-            enemy3Intention.setPreferredSize(new Dimension(32, 32));
+            enemy1Intention = new JLabel(ATK_ICON);
+            enemy1Intention.setForeground(WHITE);
+            enemy1Intention.setPreferredSize(new Dimension(32, 32));
+            enemy1Intention.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+            enemy1Intention.setVisible(true);
             c.insets = new Insets(5, 5, 10, 5);
             c.gridx = 1;
             c.gridy = 0;
-            enemy3.add(enemy3Intention, c);
+            enemy1.add(enemy1Intention, c);
 
-            enemy3Image = new JLabel(ENEMY);
-            enemy3Image.setSize(new Dimension(100, 175));
+            enemy1Image = new JLabel(ENEMY);
+            enemy1Image.setPreferredSize(new Dimension(100, 175));
             c.insets = new Insets(5, 5, 5, 5);
             c.gridx = 1;
             c.gridy = 1;
-            enemy3.add(enemy3Image, c);
+            enemy1.add(enemy1Image, c);
 
-            enemy3HealthBar = new JProgressBar();
-            enemy3HealthBar.setPreferredSize(new Dimension(200, 25));
-            enemy3HealthBar.setMaximum(combatEncounter.enemy3.hp);
-            enemy3HealthBar.setValue(combatEncounter.enemy3.hp);
-            enemy3HealthBar.setStringPainted(true);
+            enemy1HealthBar = new JProgressBar();
+            enemy1HealthBar.setPreferredSize(new Dimension(200, 25));
+            enemy1HealthBar.setMaximum(combatEncounter.enemy1.hp);
+            enemy1HealthBar.setValue(combatEncounter.enemy1.hp);
+            enemy1HealthBar.setStringPainted(true);
             c.insets = new Insets(5, 5, 5, 5);
             c.gridx = 1;
             c.gridy = 2;
-            enemy3.add(enemy3HealthBar, c);
+            enemy1.add(enemy1HealthBar, c);
 
-        }
+            intentions = new HashMap<Integer, JLabel>() {
+                {
+                    put(1, enemy1Intention);
+                    put(2, enemy2Intention);
+                    put(3, enemy3Intention);
+                }
+            };
 
-        enemy1 = new JPanel();
-        enemy1.setPreferredSize(new Dimension(250, 400));
-        enemy1.setLayout(new GridBagLayout());
-        enemy1.setBackground(BLACK);
-        c.insets = new Insets(15, 50, 15, 50);
-        c.gridx = 1;
-        c.gridy = 1;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        enemyBox.add(enemy1, c);
+            c.insets = new Insets(5, 10, 5, 10);
 
-        enemy1Intention = new JLabel(ATK_ICON);
-        enemy1Intention.setForeground(WHITE);
-        enemy1Intention.setPreferredSize(new Dimension(32, 32));
-        enemy1Intention.setAlignmentX(JLabel.CENTER_ALIGNMENT);
-        enemy1Intention.setVisible(true);
-        c.insets = new Insets(5, 5, 10, 5);
-        c.gridx = 1;
-        c.gridy = 0;
-        enemy1.add(enemy1Intention, c);
-
-        enemy1Image = new JLabel(ENEMY);
-        enemy1Image.setPreferredSize(new Dimension(100, 175));
-        c.insets = new Insets(5, 5, 5, 5);
-        c.gridx = 1;
-        c.gridy = 1;
-        enemy1.add(enemy1Image, c);
-
-        enemy1HealthBar = new JProgressBar();
-        enemy1HealthBar.setPreferredSize(new Dimension(200, 25));
-        enemy1HealthBar.setMaximum(combatEncounter.enemy1.hp);
-        enemy1HealthBar.setValue(combatEncounter.enemy1.hp);
-        enemy1HealthBar.setStringPainted(true);
-        c.insets = new Insets(5, 5, 5, 5);
-        c.gridx = 1;
-        c.gridy = 2;
-        enemy1.add(enemy1HealthBar, c);
-
-        intentions = new HashMap<Integer, JLabel>() {
-            {
-                put(1, enemy1Intention);
-                put(2, enemy2Intention);
-                put(3, enemy3Intention);
+            /**
+             * TARGET BUTTONS
+             */
+            if (combatEncounter.enemy3 != null) {
+                targetButton1 = new JButton("LOCK IN TARGET");
+                targetButton1.setPreferredSize(new Dimension(200, 40));
+                c.gridx = 0;
+                c.gridy = 0;
+                c.gridheight = 1;
+                c.gridwidth = 1;
+                c.insets = new Insets(10, 10, 10, 55);
+                targetButton1.addActionListener(a -> {
+                    target = combatEncounter.targetID.get(3);
+                    combatEncounter.targetedAbility(playerAbilityNumber, target);
+                    targetToggle();
+                });
+                botHalfPanel.add(targetButton1, c);
+                targetButton1.setVisible(false);
             }
-        };
 
-        c.insets = new Insets(5, 10, 5, 10);
+            if (combatEncounter.enemy1 != null) {
+                targetButton2 = new JButton("LOCK IN TARGET");
+                targetButton2.setPreferredSize(new Dimension(200, 40));
+                c.gridx = 1;
+                c.insets = new Insets(10, 55, 10, 55);
+                targetButton2.addActionListener(a -> {
+                    target = combatEncounter.targetID.get(1);
+                    combatEncounter.targetedAbility(playerAbilityNumber, target);
+                    targetToggle();
+                });
+                botHalfPanel.add(targetButton2, c);
+                targetButton2.setVisible(false);
 
-        /**
-         * TARGET BUTTONS
-         */
-        if (combatEncounter.enemy3 != null) {
-            targetButton1 = new JButton("LOCK IN TARGET");
-            targetButton1.setPreferredSize(new Dimension(200, 40));
-            c.gridx = 0;
-            c.gridy = 0;
-            c.gridheight = 1;
-            c.gridwidth = 1;
-            c.insets = new Insets(10, 10, 10, 55);
-            targetButton1.addActionListener(a -> {
-                target = combatEncounter.targetID.get(3);
-                combatEncounter.targetedAbility(playerAbilityNumber, target);
-                targetToggle();
-            });
-            botHalfPanel.add(targetButton1, c);
-            targetButton1.setVisible(false);
-        }
-
-        if (combatEncounter.enemy1 != null) {
-            targetButton2 = new JButton("LOCK IN TARGET");
-            targetButton2.setPreferredSize(new Dimension(200, 40));
-            c.gridx = 1;
-            c.insets = new Insets(10, 55, 10, 55);
-            targetButton2.addActionListener(a -> {
-                target = combatEncounter.targetID.get(1);
-                combatEncounter.targetedAbility(playerAbilityNumber, target);
-                targetToggle();
-            });
-            botHalfPanel.add(targetButton2, c);
-            targetButton2.setVisible(false);
-
-        }
-
-        if (combatEncounter.enemy2 != null) {
-            targetButton3 = new JButton("LOCK IN TARGET");
-            targetButton3.setPreferredSize(new Dimension(200, 40));
-            c.gridx = 2;
-            c.insets = new Insets(10, 55, 10, 10);
-            targetButton3.addActionListener(a -> {
-                target = combatEncounter.targetID.get(2);
-                combatEncounter.targetedAbility(playerAbilityNumber, target);
-                targetToggle();
-            });
-            botHalfPanel.add(targetButton3, c);
-            targetButton3.setVisible(false);
-
-        }
-
-        targetButtons = new HashMap<Integer, JButton>() {
-            {
-                put(1, targetButton1);
-                put(2, targetButton2);
-                put(3, targetButton3);
             }
-        };
 
-        window.pack();
-        window.setVisible(true);
-    }
+            if (combatEncounter.enemy2 != null) {
+                targetButton3 = new JButton("LOCK IN TARGET");
+                targetButton3.setPreferredSize(new Dimension(200, 40));
+                c.gridx = 2;
+                c.insets = new Insets(10, 55, 10, 10);
+                targetButton3.addActionListener(a -> {
+                    target = combatEncounter.targetID.get(2);
+                    combatEncounter.targetedAbility(playerAbilityNumber, target);
+                    targetToggle();
+                });
+                botHalfPanel.add(targetButton3, c);
+                targetButton3.setVisible(false);
+
+            }
+
+            targetButtons = new HashMap<Integer, JButton>() {
+                {
+                    put(1, targetButton1);
+                    put(2, targetButton2);
+                    put(3, targetButton3);
+                }
+            };
+
+            window.pack();
+            window.setVisible(true);
+        }
     }
 
     /**
@@ -726,14 +732,22 @@ public class CombatUI {
             if (combatEncounter.targetID.get(i) != null) {
                 if (combatEncounter.targetID.get(i).intention == actionState.ATTACK) {
                     intentions.get(i).setIcon(ATK_ICON);
-                    intentions.get(i).setText(String.format("%d x %d", combatEncounter.targetID.get(i).attackTurn.peek(), combatEncounter.targetID.get(i).actions));
+                    intentions.get(i)
+                            .setText(String.format("%d x %d", combatEncounter.targetID.get(i).attackTurn.peek(),
+                                    combatEncounter.targetID.get(i).actions));
+                } else if (combatEncounter.targetID.get(i).intention == actionState.SHIELD) {
+
+                    intentions.get(i).setIcon(SHIELD_ICON);
+                    intentions.get(i).setText(String.format("%d", combatEncounter.targetID.get(i).shieldTurn.peek()));
+
                 } else {
                     intentions.get(i).setIcon(HEAL_ICON);
-                    intentions.get(i).setText(String.format("%d x %d", combatEncounter.targetID.get(i).healTurn.peek(), combatEncounter.targetID.get(i).actions));
+                    intentions.get(i).setText(String.format("%d x %d", combatEncounter.targetID.get(i).healTurn.peek(),
+                            combatEncounter.targetID.get(i).actions));
                 }
             }
         }
-        
+
         // If enemy1 exists
         if (combatEncounter.enemy1 != null) {
             // If enemy1's HP is equal or below zero, disable it. This in turn "kills the

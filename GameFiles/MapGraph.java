@@ -116,13 +116,26 @@ public class MapGraph {
         return adjNodes.get(new MapNode(nodeName));
     }
 
+    class NodeData {
+        int tier, amount = 0;
+
+        public NodeData(int tier, int amount) {
+            this.tier = tier;
+            this.amount = amount;
+        }
+    }
+
+    public NodeData newData(int x, int y) {
+        return new NodeData(x, y);
+    }
+
     /**
      * Acts as the vertices on the graph
      */
     class MapNode {
         // int id;
         String name;
-        public int enemyLevel, lootType, lootAmount;
+        NodeData data = new NodeData(0, 0);
 
         public MapNode(String name) {
             this.name = name;

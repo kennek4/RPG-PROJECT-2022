@@ -19,11 +19,19 @@ public class MapDriver {
 
         String currentPos = "park";
 
-        while (true) {
-            System.out.println("Where do you want to go?");
-            System.out.println(map.getAdjList(currentPos));
-            // String choice = sc.next();
-            // currentPos = choice;
-        }
+        // System.out.println(map.getNode("park").lootType);
+
+        // map.getNode("park").lootType = 3;
+
+        // System.out.println(map.getNode("park").lootType);
+
+        System.out.println(map.getNode("park").data.amount);
+        System.out.println(map.getNode("park").data.tier);
+
+        map.getNode("park").data = map.newData(1, 2);
+
+        System.out.println(map.getNode("park").data.amount);
+        System.out.println(map.getNode("park").data.tier);
+
     }
 }

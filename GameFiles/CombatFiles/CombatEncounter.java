@@ -54,8 +54,8 @@ public class CombatEncounter {
                 put(2, player.gun.a2);
                 put(3, player.gun.a3);
                 put(4, player.gun.a4);
-                put(5, new PlayerAbility("Bandage Up", new int[] { 10, 15 }, 0, 2, 3));
-                put(6, new PlayerAbility("Hunker Down", null, player.armour.armourAmount, 5, 3));
+                put(5, new PlayerAbility("First Aid", new int[] { 10, 15 }, 0, 2, 3));
+                put(6, new PlayerAbility("Armour Up", null, player.armour.armourAmount, 5, 3));
             }
         };
 
@@ -184,7 +184,6 @@ public class CombatEncounter {
         updateEnemyHealthState();
         ui.refreshGUI();
     }
-                 
 
     /**
      * A method that is called when the player's turn is finished.
@@ -192,12 +191,12 @@ public class CombatEncounter {
      */
     void enemyTurn(int i) {
 
-        if (targetID.get(i) != null) {  
+        if (targetID.get(i) != null) {
             if (targetID.get(i).isActive == true) {
                 if (targetID.get(i).intention == actionState.ATTACK) {
                     int dmg = targetID.get(i).attackTurn.poll();
                     System.out.println("Dmg: " + dmg);
-                    int actions = targetID.get(i).actions;      
+                    int actions = targetID.get(i).actions;
                     targetID.get(i).rollActions();
                     ui.refreshGUI();
                     if (player.shield > (dmg * actions)) {
