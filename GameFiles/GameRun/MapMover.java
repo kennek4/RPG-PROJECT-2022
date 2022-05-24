@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
 import CombatFiles.Player;
-import GameRun.MapGraph.MapNode;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -36,6 +35,7 @@ public class MapMover extends JPanel implements ActionListener {
 
     MapData mapData;
     MapGraph currentArea;
+    int currentAreaID = 1;
 
     final ImageIcon PLAYER_ICON = new ImageIcon("GameFiles\\playerPortrait.png");
 
@@ -63,6 +63,7 @@ public class MapMover extends JPanel implements ActionListener {
 
     HashMap<Integer, MapGraph.MapNode> nodeID;
     HashMap<Integer, JLabel> nodeLabels;
+    HashMap<Integer, MapGraph.MapNode> areaStarts;
 
     static final private String PREVIOUS = "previous";
     static final private String UP = "up";
@@ -100,7 +101,18 @@ public class MapMover extends JPanel implements ActionListener {
             }
         };
 
-        this.currentArea = areaCodes.get(1);
+        areaStarts = new HashMap<>() {
+            {
+                put(1, mapData.area1.getNode("hospital"));
+                put(2, mapData.area2.getNode("highway"));
+                put(3, mapData.area3.getNode("bridge"));
+                put(4, mapData.area4.getNode("bridge"));
+                put(5, mapData.area5.getNode("street"));
+                put(6, mapData.area6.getNode("bridge"));
+            }
+        };
+
+        this.currentArea = areaCodes.get(currentAreaID);
         this.currentLocation = currentArea.getNode("hospital");
         this.aboveNode = currentArea.getAdjList(currentLocation.name).get(0);
         this.rightNode = currentArea.getAdjList(currentLocation.name).get(1);
@@ -230,17 +242,14 @@ public class MapMover extends JPanel implements ActionListener {
         }
     }
 
-    class PlayerInventory extends JPanel {
-        public PlayerInventory() {
-            set
-        }
-    }
-
     /**
      * Creates the left side of the Game window; contains player info
      */
     class PlayerInfo extends JPanel {
-        public PlayerInfo() {
+        Player player;
+
+        public PlayerInfo(Player player) {
+            this.player = player;
             setLayout(new GridBagLayout());
             setPreferredSize(new Dimension(300, 400));
             setBackground(BLACK);
@@ -271,16 +280,12 @@ public class MapMover extends JPanel implements ActionListener {
             add(playerStats, c);
 
             playerInv.setText("Show Inventory");
-            playerStats.addActionListener(a -> {
-                String inventorySlots = "";
-                for (int i = 0; i < player.organization; i++) {
-                    inventorySlots += "%d ";
-                }
-
+            playerInv.addActionListener(b -> {
+                String x = showInventory();
+                JOptionPane.showMessageDialog(this, x, "INVENTORY ITEMS", JOptionPane.PLAIN_MESSAGE);
             });
             playerInv.setToolTipText("Shows the contents of the player's inventory.");
             c.insets = new Insets(10, 0, 10, 0);
-
             c.gridheight = 1;
             c.gridwidth = 1;
             c.gridx = 2;
@@ -297,6 +302,19 @@ public class MapMover extends JPanel implements ActionListener {
             add(playerName, c);
         }
 
+        private String showInventory() {
+            String inventoryItems = "";
+            for (int i = 0; i < player.inventory.size(); i++) {
+                if (player.inventory.get(i).gunName == player.gun.gunName) {
+                    inventoryItems += "EQUIPPED: " + (player.inventory.get(i).gunName) + "\n";
+                } else {
+                    inventoryItems += (player.inventory.get(i).gunName) + "\n";
+                }
+            }
+
+            return inventoryItems;
+        }
+
     }
 
     /**
@@ -305,15 +323,24 @@ public class MapMover extends JPanel implements ActionListener {
      * @param direction
      */
     private void moveTo(int direction) {
+
         if (currentArea.getAdjList(currentLocation.name).size() == 2) {
             if (direction == 2) {
                 direction = 1;
                 currentLocation = currentArea.getAdjList(currentLocation.name).get(direction);
             }
+        } else if (currentArea.getAdjList(currentLocation.name).size() == 1) {
+            currentLocation = currentArea.getAdjList(currentLocation.name).get(0);
         } else {
             currentLocation = currentArea.getAdjList(currentLocation.name).get(direction);
         }
-        updateLocations();
+
+        if (currentArea.getNode(currentLocation.name).data.tier == 5) {
+            System.out.println("What is up mfs");
+            currentAreaID++;
+            currentArea = areaCodes.get(currentAreaID);
+            currentLocation = areaStarts.get(currentAreaID);
+        }
 
         // Creates an encounter if there are enemies in the area
         if (currentArea.getNode(currentLocation.name).data.enemyAmount > 0) {
@@ -321,6 +348,7 @@ public class MapMover extends JPanel implements ActionListener {
                     currentLocation.name).data.tier,
                     currentArea.getNode(currentLocation.name).data.enemyAmount, window, player, game);
         }
+        updateLocations();
     }
 
     /**
@@ -373,7 +401,7 @@ public class MapMover extends JPanel implements ActionListener {
      */
     void createWindow() {
         GraphicMap map = new GraphicMap();
-        PlayerInfo playerInfo = new PlayerInfo();
+        PlayerInfo playerInfo = new PlayerInfo(player);
 
         window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

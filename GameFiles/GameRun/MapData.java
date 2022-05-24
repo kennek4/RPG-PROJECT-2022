@@ -73,7 +73,7 @@ public class MapData {
         area1.addEdge("lumberStore", "highway");
         area1.addEdge("highway", "checkpoint");
 
-        System.out.println(area1.getAdjList("hospital"));
+        System.out.println(area1.getAdjList("checkpoint"));
 
         area2 = new MapGraph();
         area2.addNode("highway");

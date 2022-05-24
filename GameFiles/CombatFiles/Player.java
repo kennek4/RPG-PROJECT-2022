@@ -1,7 +1,11 @@
 package CombatFiles;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  * The user
@@ -11,9 +15,9 @@ public class Player {
 	Random r = new Random();
 
 	public String name;
-	public Gun[] inventory;
+	public ArrayList<Gun> inventory;
 	public int hp, perception, organization, dexterity, shooting, shield;
-	Armour armour;
+	public Armour armour;
 	public Gun gun;
 
 	private String[] ranks = { "Private", "Captain", "First Sergeant", "Lieutenant" };
@@ -41,8 +45,32 @@ public class Player {
 		this.armour = armour;
 		this.shield = 0;
 
-		this.inventory = new Gun[dexterity];
+		this.inventory = new ArrayList<>();
 		this.name = String.format("%s %s", (ranks[r.nextInt(ranks.length)]), (lastNames[r.nextInt(lastNames.length)]));
+
+	}
+
+	/**
+	 * Method to add a gun to the player's inventory
+	 * 
+	 * @param gun the gun object that will be added.
+	 */
+	public void addToInventory(Gun gun, JFrame window) {
+		if ((inventory.size() + 1) <= organization) {
+			inventory.add(gun);
+		} else {
+			JOptionPane.showConfirmDialog(window,
+					"Inventory is full! Cannot add another item.\n Empty an inventory slot before adding a new item.",
+					"Inventory is full", JOptionPane.YES_OPTION);
+		}
+	}
+
+	/**
+	 * A method to remove an item from the inventory *NOT REVERSIBLE*
+	 * 
+	 * @param inventoryID the ID of the item that will be removed.
+	 */
+	public void removeFromInventory(int inventoryID) {
 
 	}
 }
