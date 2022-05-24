@@ -1,5 +1,7 @@
 package CombatFiles;
 
+import java.util.HashMap;
+
 /**
  * Gun class; holds unique GunAbilities for use in combat by the user.
  */
@@ -11,8 +13,7 @@ public class Gun {
     boolean needsTarget;
 
     PlayerAbility a1, a2, a3, a4;
-
-    CombatUI ui;
+    HashMap<Integer, PlayerAbility> abilityID;
 
     /**
      * Constructor for a gun that requires an 4 abilities.
@@ -27,6 +28,15 @@ public class Gun {
         this.a2 = a2;
         this.a3 = a3;
         this.a4 = a4;
+
+        abilityID = new HashMap<>() {
+            {
+                put(0, a1);
+                put(1, a2);
+                put(2, a3);
+                put(3, a4);
+            }
+        };
     }
 
 }

@@ -1,3 +1,4 @@
+package GameRun;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -117,16 +118,18 @@ public class MapGraph {
     }
 
     class NodeData {
-        int tier, amount = 0;
+        int tier, enemyAmount;
+        boolean isCleared = false;
+        String desc;
 
         public NodeData(int tier, int amount) {
             this.tier = tier;
-            this.amount = amount;
+            this.enemyAmount = amount;
         }
     }
 
-    public NodeData newData(int x, int y) {
-        return new NodeData(x, y);
+    public NodeData newData(int areaTier, int enemyAmount) {
+        return (new NodeData(areaTier, enemyAmount));
     }
 
     /**

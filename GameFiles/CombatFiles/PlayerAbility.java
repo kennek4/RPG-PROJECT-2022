@@ -1,7 +1,5 @@
 package CombatFiles;
 
-import java.util.Random;
-
 /**
  * Ability class that is used in the Gun class
  */
@@ -10,11 +8,8 @@ public class PlayerAbility {
     // Variables
     private String abilityName;
     private boolean needsTarget;
-    private int abilityBaseDMG, abilityCost, numberOfActions, armourAmount, turnLimit;
-    private double acc;
+    private int abilityBaseDMG, abilityCost, numberOfActions, armourAmount, critChance;
     private int[] healRange;
-
-    int currentTurnPP;
 
     /**
      * Constructor for creating a new ability for a gun.
@@ -23,81 +18,44 @@ public class PlayerAbility {
      * @param needsTarget    if the ability requires a target to function.
      * @param abilityBaseDMG the base damage dealt for the ability.
      * @param abilityCost    the action cost of the ability.
-     * @param turnLimit      the number of times the ability can be used in one
-     *                       turn.
+     * @param critChance     the percent chance to crit the enemy.
      */
     public PlayerAbility(String abilityName, boolean needsTarget, int abilityBaseDMG, int abilityCost,
-            int numberOfActions, double acc, int turnLimit) {
+            int numberOfActions, int critChance) {
+
         this.abilityName = abilityName;
         this.needsTarget = needsTarget;
         this.abilityBaseDMG = abilityBaseDMG;
         this.abilityCost = abilityCost;
         this.numberOfActions = numberOfActions;
-        this.turnLimit = turnLimit;
-        this.acc = acc;
-        this.currentTurnPP = turnLimit;
+        this.critChance = critChance;
+
     }
 
     /**
-     * Constructor for creating player abilites outside of the gun.
+     * A constructor for support skills
      * 
      * @param abilityName
-     * @param healAmount
+     * @param healRange
      * @param armourAmount
      * @param abilityCost
+     * @param turnLimit
      */
     public PlayerAbility(String abilityName, int[] healRange, int armourAmount, int abilityCost, int turnLimit) {
         this.abilityName = abilityName;
         this.healRange = healRange;
         this.armourAmount = armourAmount;
         this.abilityCost = abilityCost;
-        this.turnLimit = turnLimit;
-        this.currentTurnPP = turnLimit;
     }
 
     /**
      * Returns the dmg dealt by the ability, a method for ability damage
      * calculations.
      * 
-     * @return abilityBaseDMG * numberOfActions
+     * @return abilityBaseDMG
      */
     public int useAbility() {
-        Random r = new Random();
-        int actualShots = 0;
-
-        // If there are multiple actions.
-        if (numberOfActions > 1) {
-            // Calculating how many bullets hit.
-            for (int i = 0; i < numberOfActions; i++) {
-                if (!((r.nextDouble() * 100) > acc)) {
-                    actualShots++;
-                }
-            }
-
-            // Returns dmg after accuracy calculations
-            return abilityBaseDMG * actualShots;
-        } else {
-            return abilityBaseDMG;
-        }
-    }
-
-    /**
-     * Returns the current PP of the ability during a turn
-     * 
-     * @return currentTurnPP
-     */
-    public int getCurrentPP() {
-        return currentTurnPP;
-    }
-
-    /**
-     * A method that returns the amount of times the ability can be called in one
-     * turn.
-     * 
-     * @return turnLimit
-     */
-    public int getLimit() {
-        return turnLimit;
+        return abilityBaseDMG;
     }
 
     /**
@@ -117,6 +75,10 @@ public class PlayerAbility {
      */
     public int[] getHealRange() {
         return healRange;
+    }
+
+    public int getCritChance() {
+        return critChance;
     }
 
     /**

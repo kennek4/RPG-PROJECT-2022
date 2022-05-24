@@ -81,7 +81,8 @@ public class Enemy {
 	public healthState currentHealthState;
 
 	// Stats
-	int hp, dexterity, enemyTier, actions, shield;
+	int hp, dexterity, enemyTier, shield;
+	int actions = r.nextInt(3) + 1;
 	Armour armour;
 	String name;
 
@@ -92,14 +93,20 @@ public class Enemy {
 	Boolean isActive;
 
 	// The enemy's dmg range
-	int dmgBounds;
+	int minDamage, maxDamage;
 
 	// DMG Range variables
-	private final int TIER_1 = 8;
-	private final int TIER_2 = 10;
-	private final int TIER_3 = 12;
-	private final int TIER_4 = 14;
-	private final int TIER_5 = 18; // Boss level dmg
+	private final int[] DAMAGE_TIER_1 = { 6, 9 };
+	private final int[] DAMAGE_TIER_2 = { 7, 10 };
+	private final int[] DAMAGE_TIER_3 = { 8, 11 };
+	private final int[] DAMAGE_TIER_4 = { 10, 12 };
+	private final int[] DAMAGE_TIER_5 = { 12, 15 }; // Boss level dmg
+
+	private final int SHIELD_TIER_1 = 10;
+	private final int SHIELD_TIER_2 = 15;
+	private final int SHIELD_TIER_3 = 20;
+	private final int SHIELD_TIER_4 = 25;
+	private final int SHIELD_TIER_5 = 40;
 
 	/**
 	 * The base dmg for different enemy tiers.
@@ -109,13 +116,23 @@ public class Enemy {
 	 * int[1] = high dmg bound)
 	 */
 
-	HashMap<Integer, Integer> enemyTierMaxDMG = new HashMap<>() {
+	HashMap<Integer, int[]> enemyTierMaxDMG = new HashMap<>() {
 		{
-			put(1, TIER_1);
-			put(2, TIER_2);
-			put(3, TIER_3);
-			put(4, TIER_4);
-			put(5, TIER_5);
+			put(1, DAMAGE_TIER_1);
+			put(2, DAMAGE_TIER_2);
+			put(3, DAMAGE_TIER_3);
+			put(4, DAMAGE_TIER_4);
+			put(5, DAMAGE_TIER_5);
+		}
+	};
+
+	HashMap<Integer, Integer> enemyShieldTier = new HashMap<>() {
+		{
+			put(1, SHIELD_TIER_1);
+			put(2, SHIELD_TIER_2);
+			put(3, SHIELD_TIER_3);
+			put(4, SHIELD_TIER_4);
+			put(5, SHIELD_TIER_5);
 		}
 	};
 
@@ -163,15 +180,17 @@ public class Enemy {
 		this.hp = hp;
 		this.armour = armour;
 
-		this.dmgBounds = enemyTierMaxDMG.get(enemyTier);
+		this.minDamage = enemyTierMaxDMG.get(enemyTier)[0];
+		this.maxDamage = enemyTierMaxDMG.get(enemyTier)[1];
 		attackTurn = new LinkedList<>() {
 			{
-				offer(r.nextInt(dmgBounds) + 1);
+				offer(r.nextInt(minDamage, maxDamage));
 			}
 		};
 
-		System.out.println("attackTurn: " + attackTurn);
-
+		/**
+		 * Initializing queues
+		 */
 		healTurn = new LinkedList<>() {
 			{
 				offer(r.nextInt(5) + 1);
@@ -189,45 +208,46 @@ public class Enemy {
 				offer(r.nextInt(10) + 1);
 			}
 		};
+
 		this.intention = nextTurnIntention.poll();
 
 		this.isActive = true;
 		this.currentHealthState = setHealthState();
-		this.shield = 0;
+		this.shield = enemyShieldTier.get(enemyTier);
 	}
 
 	/**
 	 * Enemy attack method, called when enemies need to attack the player.
 	 */
-	void attack() {
+	private void attack() {
 
 		// Rolls for the next attack
-		attackTurn.offer(r.nextInt(dmgBounds) + 1);
+		attackTurn.offer(r.nextInt(minDamage, maxDamage));
 
 	}
 
-	void heal() {
+	private void heal() {
 
 		// Rolls for next heal
-		healTurn.offer(r.nextInt(10) + 1);
+		healTurn.offer(r.nextInt(10, 20));
 
 	}
 
-	void shield() {
+	private void shield() {
 
 		// Rolls for the next shield.
-		shieldTurn.offer(r.nextInt(10) + 1);
-		System.out.println(shieldTurn);
+		shieldTurn.offer(r.nextInt(10, 20));
 	}
 
 	void nextTurn() {
+		boolean x = r.nextBoolean();
 		if ((r.nextInt(100) + 1) < currentHealthState.chanceToAttack()) {
 			nextTurnIntention.offer(actionState.ATTACK);
 			attack();
-		} else if (r.nextInt(100) + 1 < currentHealthState.chanceToAttack()){
+		} else if (x) {
 			nextTurnIntention.offer(actionState.HEALING);
 			heal();
-		} else {
+		} else if (!x) {
 			nextTurnIntention.offer(actionState.SHIELD);
 			shield();
 		}

@@ -1,13 +1,23 @@
 package CombatFiles;
 
+import java.util.HashMap;
+import java.util.Random;
+
 /**
  * The user
  */
 public class Player {
 
-	int hp, perception, organization, dexterity, shooting, shield;
+	Random r = new Random();
+
+	public String name;
+	public Gun[] inventory;
+	public int hp, perception, organization, dexterity, shooting, shield;
 	Armour armour;
-	Gun gun;
+	public Gun gun;
+
+	private String[] ranks = { "Private", "Captain", "First Sergeant", "Lieutenant" };
+	private String[] lastNames = { "Choi", "Lee", "Park", "Kim", "Go", "Jo", "Oh", "Jeong", "Lim", "Son" };
 
 	/**
 	 * Constructor for making the player object.
@@ -30,6 +40,9 @@ public class Player {
 		this.hp = hp;
 		this.armour = armour;
 		this.shield = 0;
+
+		this.inventory = new Gun[dexterity];
+		this.name = String.format("%s %s", (ranks[r.nextInt(ranks.length)]), (lastNames[r.nextInt(lastNames.length)]));
 
 	}
 }
