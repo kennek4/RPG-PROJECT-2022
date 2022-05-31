@@ -117,10 +117,10 @@ public class MapGraph {
         return adjNodes.get(new MapNode(nodeName));
     }
 
-    class NodeData {
-        int tier, enemyAmount;
-        boolean isCleared = false;
-        String desc;
+    public class NodeData {
+        public int tier;
+        int enemyAmount;
+        String areaType;
 
         public NodeData(int tier, int amount) {
             this.tier = tier;
@@ -135,10 +135,10 @@ public class MapGraph {
     /**
      * Acts as the vertices on the graph
      */
-    class MapNode {
+    public class MapNode {
         // int id;
         String name;
-        NodeData data = new NodeData(0, 0);
+        public NodeData data = new NodeData(0, 0);
 
         public MapNode(String name) {
             this.name = name;

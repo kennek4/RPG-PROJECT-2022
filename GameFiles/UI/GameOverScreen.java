@@ -24,7 +24,6 @@ public class GameOverScreen {
     JFrame window;
     JLabel label;
     JPanel gameOverPanel;
-    JButton mainMenuButton;
     JButton quitButton;
 
     Scanner reader;
@@ -55,14 +54,6 @@ public class GameOverScreen {
         c.gridx = 1;
         c.gridy = 0;
         gameOverPanel.add(picLabel, c);
-
-        mainMenuButton = new JButton("MAIN MENU");
-        mainMenuButton.addActionListener(a -> {
-            // Insert function call to go to main menu here
-        });
-        c.gridx = 1;
-        c.gridy = 1;
-        gameOverPanel.add(mainMenuButton, c);
 
         quitButton = new JButton("QUIT TO DESKTOP");
         quitButton.addActionListener(a -> {

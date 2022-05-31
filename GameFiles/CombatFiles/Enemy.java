@@ -96,17 +96,17 @@ public class Enemy {
 	int minDamage, maxDamage;
 
 	// DMG Range variables
-	private final int[] DAMAGE_TIER_1 = { 6, 9 };
-	private final int[] DAMAGE_TIER_2 = { 7, 10 };
-	private final int[] DAMAGE_TIER_3 = { 8, 11 };
-	private final int[] DAMAGE_TIER_4 = { 10, 12 };
-	private final int[] DAMAGE_TIER_5 = { 12, 15 }; // Boss level dmg
+	private final int[] DAMAGE_TIER_1 = { 6, 12 };
+	private final int[] DAMAGE_TIER_2 = { 9, 14 };
+	private final int[] DAMAGE_TIER_3 = { 10, 15 };
+	private final int[] DAMAGE_TIER_4 = { 14, 16 };
+	private final int[] DAMAGE_TIER_5 = { 17, 20 }; // Boss level dmg
 
-	private final int SHIELD_TIER_1 = 10;
-	private final int SHIELD_TIER_2 = 15;
-	private final int SHIELD_TIER_3 = 20;
-	private final int SHIELD_TIER_4 = 25;
-	private final int SHIELD_TIER_5 = 40;
+	private final int SHIELD_TIER_1 = 25;
+	private final int SHIELD_TIER_2 = 30;
+	private final int SHIELD_TIER_3 = 50;
+	private final int SHIELD_TIER_4 = 75;
+	private final int SHIELD_TIER_5 = 150;
 
 	/**
 	 * The base dmg for different enemy tiers.
@@ -179,6 +179,7 @@ public class Enemy {
 		this.name = name;
 		this.hp = hp;
 		this.armour = armour;
+		this.enemyTier = enemyTier;
 
 		this.minDamage = enemyTierMaxDMG.get(enemyTier)[0];
 		this.maxDamage = enemyTierMaxDMG.get(enemyTier)[1];
@@ -193,7 +194,7 @@ public class Enemy {
 		 */
 		healTurn = new LinkedList<>() {
 			{
-				offer(r.nextInt(5) + 1);
+				offer(r.nextInt(20) + 1);
 			}
 		};
 
@@ -205,7 +206,7 @@ public class Enemy {
 
 		shieldTurn = new LinkedList<>() {
 			{
-				offer(r.nextInt(10) + 1);
+				offer(r.nextInt(enemyShieldTier.get(enemyTier)) + 1);
 			}
 		};
 
@@ -236,7 +237,7 @@ public class Enemy {
 	private void shield() {
 
 		// Rolls for the next shield.
-		shieldTurn.offer(r.nextInt(10, 20));
+		shieldTurn.offer(r.nextInt(10, enemyShieldTier.get(enemyTier) + 1));
 	}
 
 	void nextTurn() {

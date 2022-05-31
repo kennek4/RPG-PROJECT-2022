@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import CombatFiles.Enemy.actionState;
 import GameRun.GameDriver;
@@ -20,12 +21,14 @@ public class CombatEncounter {
     public CombatUI ui;
     public JFrame window;
     public GameDriver game;
+    public boolean isLastArea;
 
     // Player related variables
     Player player;
     Enemy playersTarget;
     int actionPoints, playerExtraDamage;
     int tier;
+    boolean isBoss = false;
 
     // Enemy variables
     Enemy enemy1;
@@ -51,8 +54,22 @@ public class CombatEncounter {
     public CombatEncounter(Player player, int numberOfEnemies, int levelEnemyTier) {
         this.player = player;
         this.player.shield = 0;
+
+        // Player is rested.
+        if (player.isRested == true) {
+            player.shield = 50;
+            player.hp += 20;
+            if (player.hp > 100) {
+                player.hp = 100;
+            }
+        }
+
         this.numberOfEnemies = numberOfEnemies;
         this.tier = levelEnemyTier;
+
+        if (levelEnemyTier == 5) {
+            isBoss = true;
+        }
 
         // Mapping the player skills to a HashMap for easier access later on.
         abilityID = new HashMap<>() {
@@ -61,14 +78,14 @@ public class CombatEncounter {
                 put(2, player.gun.a2);
                 put(3, player.gun.a3);
                 put(4, player.gun.a4);
-                put(5, new PlayerAbility("First Aid", new int[] { 10, 15 }, 0, 3, 3));
-                put(6, new PlayerAbility("Armour Up", null, player.armour.armourAmount, 4, 3));
+                put(5, new PlayerAbility("First Aid", new int[] { 10, 20 + player.perception }, 0, 4, 3));
+                put(6, new PlayerAbility("Armour Up", null, player.armour.armourAmount, 4, 2));
             }
         };
 
         // The initial action points of the player. Action points increase depending on
-        // player's dexterity
-        actionPoints = 10 + (Math.floorDiv(player.dexterity, 3));
+        // player's dexterity5
+        actionPoints = 7 + (Math.floorDiv(player.dexterity, 3));
 
         // Extra damage depending on the player's shooting skill
         playerExtraDamage = (Math.floorDiv(player.shooting, 2));
@@ -150,7 +167,7 @@ public class CombatEncounter {
                 for (int bullet = 0; bullet < actions; bullet++) {
                     int roll = r.nextInt(100);
                     if (roll < abilityID.get(playerAbilityNumber).getCritChance()) {
-                        System.out.println("Bullet " + bullet + " crit!");
+                        // System.out.println("Bullet " + bullet + " crit!");
                         critDamageDealt += (baseDamage * 2);
                         critBullets++;
                         totalDamage += critDamageDealt;
@@ -200,7 +217,7 @@ public class CombatEncounter {
         for (int bullet = 0; bullet < actions; bullet++) {
             int roll = r.nextInt(100);
             if (roll < abilityID.get(playerAbilityNumber).getCritChance()) {
-                System.out.println("Bullet " + bullet + " crit!");
+                // System.out.println("Bullet " + bullet + " crit!");
                 critDamageDealt += (baseDamage * 2);
                 critBullets++;
                 totalDamage += critDamageDealt;
@@ -277,15 +294,17 @@ public class CombatEncounter {
                     int actions = targetID.get(i).actions;
                     int amount = targetID.get(i).healTurn.poll();
 
-                    System.out.println("enemy actions : " + actions);
-                    System.out.println("enemy amount : " + amount);
-
                     targetID.get(i).hp += ((int) Math.floor(amount * actions));
                     targetID.get(i).currentHealthState = targetID.get(i).setHealthState();
                 } else if (targetID.get(i).intention == actionState.SHIELD) {
                     targetID.get(i).shield += targetID.get(i).shieldTurn.poll();
                 }
                 targetID.get(i).nextTurn();
+            }
+
+            // Sets enemy health back to 100 if the enemy healed for over their max health
+            if (targetID.get(i).hp > 100) {
+                targetID.get(i).hp = 100;
             }
         }
 
@@ -296,7 +315,7 @@ public class CombatEncounter {
      * End player turn, resets action points and enemies perform their actions
      */
     void endTurn() {
-        actionPoints = 10;
+        actionPoints = 7 + (Math.floorDiv(player.dexterity, 3));
         for (int i = 1; i < 4; i++) {
             if (targetID.get(i) != null) {
                 if (targetID.get(i).isActive == true) {
@@ -317,21 +336,55 @@ public class CombatEncounter {
             }
         }
 
-        System.out.println(deadEnemies);
-
         if (deadEnemies == numberOfEnemies) {
             endCombat();
+        } else {
+            deadEnemies = 0;
         }
-
-        deadEnemies = 0;
 
         ui.refreshGUI();
     }
 
+    /**
+     * Method that ends combat, then rolls for loot.
+     */
     private void endCombat() {
         System.out.println("Combat Ending...");
-        ui.window.dispose();
 
-        game.rollForLoot(window, player);
+        if (isLastArea) {
+            ui.window.dispose();
+            JOptionPane.showMessageDialog(ui.window,
+                    "As the crackles of gun fire settle down and the adrenaline of combat disappears, you move across the now cleared bridge.\nAs you arrive to the other side of the bridge, you arrive in friendly territory.\nThe perilous journey to retrive and deliver back the Platinum USB has lead you to reach the outer edge of the Busan Perimiter.",
+                    "End Game", JOptionPane.OK_OPTION);
+            JOptionPane.showMessageDialog(ui.window,
+                    "Shortly after arriving you reach the ROK Military HQ located at the Busan Naval Base...\n\nYou hand over the Platinum USB to the Special Forces Commander.",
+                    "End Game", JOptionPane.OK_OPTION);
+
+            JOptionPane.showMessageDialog(ui.window,
+                    "The Platinum USB you handed over contained the necessary information to create a successful counter attack on the northern part of the Busan Perimeter.\nEncirclement of an entire North Korean army group north of the perimeter allowed the ROK forces to push the North Koreans back to the 38th Demarkation Line.\n\nBecause of your efforts, that is the story so far...",
+                    "The END", JOptionPane.OK_OPTION);
+
+            JOptionPane.showMessageDialog(ui.window,
+                    "Mission Successful\nPackage Succesfully Delivered.\nCourier Survived.", "The END",
+                    JOptionPane.OK_OPTION);
+            System.exit(1);
+        } else {
+            // Upgrades armour when the combat was a tier 5
+            if (isBoss) {
+                JOptionPane.showMessageDialog(ui.window,
+                        "As you clear the checkpoint of its guards, you look around for supplies...\nYou find new body armour and equip it immidiately.\n(Armour Class +1)\n\nYou update your map...\n(Perception +1)",
+                        "Upgrade", JOptionPane.PLAIN_MESSAGE);
+                player.armour = GameDriver.armours.get(player.armour.armourClass + 1);
+                player.perception += 1;
+
+                // Updates the armour up ability
+                abilityID.put(6, new PlayerAbility("Armour Up", null, player.armour.armourAmount, 4, 2));
+            }
+
+            ui.window.dispose();
+
+            player.isRested = false;
+            game.rollForLoot(window, player);
+        }
     }
 }

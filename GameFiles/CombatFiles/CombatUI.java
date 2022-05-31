@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -37,6 +38,8 @@ public class CombatUI {
     final ImageIcon DMG_ICON = new ImageIcon("GameFiles\\CombatFiles\\CombatImages\\abilitydmg_icon.png");
     final ImageIcon ENERGY_ICON = new ImageIcon("GameFiles\\CombatFiles\\CombatImages\\energy_icon.png");
     final ImageIcon ENEMYDEAD_IMAGE = new ImageIcon("GameFiles\\CombatFiles\\CombatImages\\enemydead_image.png");
+    final ImageIcon PLAYER_PORTRAIT = new ImageIcon("GameFiles\\CombatFiles\\CombatImages\\player.png");
+    final ImageIcon GUN_IMG = new ImageIcon("GameFiles\\CombatFiles\\CombatImages\\gunImg.png");
 
     // LEFT SIDE TOP HALF VARIABLES
     JFrame window;
@@ -144,12 +147,13 @@ public class CombatUI {
         // The combat system logic
         this.combatEncounter = combatEncounter;
 
-        window = new JFrame("Test");
+        window = new JFrame("Combat Encounter");
         window.setPreferredSize(new Dimension(1600, 900));
         window.setSize(1600, 900);
         window.setResizable(false);
         window.setLocationRelativeTo(null);
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        window.setBackground(BLACK);
 
         GridBagConstraints c = new GridBagConstraints();
         window.setLayout(new GridBagLayout());
@@ -160,11 +164,11 @@ public class CombatUI {
          */
         playerInfoBox = new JPanel();
         playerInfoBox.setLayout(new GridBagLayout());
-        playerInfoBox.setBackground(Color.BLUE);
+        playerInfoBox.setBackground(BLACK);
         playerInfoBox.setPreferredSize(new Dimension(500, 800));
         c.gridx = 0;
         c.gridy = 0;
-        c.insets = new Insets(10, 15, 10, 15);
+        c.insets = new Insets(30, 15, 10, 15);
         window.add(playerInfoBox, c);
 
         // Left side top half
@@ -181,16 +185,18 @@ public class CombatUI {
 
         // Player portrait - left side top half
         playerPortrait = new JPanel();
+        label = new JLabel(PLAYER_PORTRAIT);
+        playerPortrait.add(label);
         playerPortrait.setPreferredSize(new Dimension(200, 200));
-        playerPortrait.setBackground(Color.LIGHT_GRAY);
-        c.gridx = 0;
+        playerPortrait.setBackground(BLACK);
         c.gridy = 0;
         c.gridheight = 2;
         c.gridwidth = 2;
         c.insets = new Insets(5, 0, 10, 20);
         pTopHalfPanel.add(playerPortrait, c);
 
-        gunName = new JLabel("AK-47");
+        gunName = new JLabel(String.format("%s", combatEncounter.player.gun.gunName));
+        gunName.setForeground(WHITE);
         gunName.setVerticalAlignment(JLabel.BOTTOM);
         gunName.setHorizontalAlignment(JLabel.CENTER);
         gunName.setPreferredSize(new Dimension(150, 20));
@@ -203,7 +209,9 @@ public class CombatUI {
         pTopHalfPanel.add(gunName, c);
 
         gunIMG = new JPanel();
-        gunIMG.setBackground(Color.DARK_GRAY);
+        gunIMG.setBackground(BLACK);
+        label = new JLabel(GUN_IMG);
+        gunIMG.add(label);
         gunIMG.setPreferredSize(new Dimension(125, 150));
         c.gridx = 2;
         c.gridy = 1;
@@ -543,7 +551,7 @@ public class CombatUI {
 
         actionPointBox = new JPanel();
         actionPointBox.setPreferredSize(new Dimension(250, 150));
-        actionPointBox.setBackground(Color.RED);
+        actionPointBox.setBackground(BLACK);
         actionPointBox.setLayout(new GridBagLayout());
         c.gridx = 0;
         c.gridy = 0;
@@ -551,9 +559,10 @@ public class CombatUI {
         c.gridwidth = 1;
         envInfoBoxImg.add(actionPointBox, c);
 
-        actionPointText = new JLabel(String.format("%d", combatEncounter.actionPoints));
+        actionPointText = new JLabel(String.format("Action Points: %d", combatEncounter.actionPoints));
         actionPointText.setPreferredSize(new Dimension(250, 150));
-        actionPointText.setBackground(BLACK);
+        actionPointText.setFont(new Font("Sans Serif", Font.PLAIN, 20));
+        actionPointText.setForeground(WHITE);
         c.gridx = 0;
         actionPointBox.add(actionPointText, c);
 
@@ -855,7 +864,7 @@ public class CombatUI {
         shieldBar.setText(String.format("%d", combatEncounter.player.shield));
 
         // Refreshes the actions points to its updated values.
-        actionPointText.setText(String.format("%d", combatEncounter.actionPoints));
+        actionPointText.setText(String.format("Action Points: %d", combatEncounter.actionPoints));
 
         /**
          * Button and Ability PP refreshing
@@ -901,6 +910,7 @@ public class CombatUI {
                 enemy1Image.setIcon(ENEMYDEAD_IMAGE);
                 enemy1Intention.setVisible(false);
                 enemy1Shield.setVisible(false);
+                targetButton2.setEnabled(false);
 
             } else {
                 enemy1HealthBar.setValue(combatEncounter.enemy1.hp);
@@ -918,6 +928,7 @@ public class CombatUI {
                 enemy2Image.setIcon(ENEMYDEAD_IMAGE);
                 enemy2Intention.setVisible(false);
                 enemy2Shield.setVisible(false);
+                targetButton3.setEnabled(false);
             } else {
                 enemy2HealthBar.setValue(combatEncounter.enemy2.hp);
                 enemy2Shield.setText(String.format("%d", combatEncounter.targetID.get(2).shield));
@@ -935,6 +946,8 @@ public class CombatUI {
                 enemy3Image.setIcon(ENEMYDEAD_IMAGE);
                 enemy3Intention.setVisible(false);
                 enemy3Shield.setVisible(false);
+                targetButton1.setEnabled(false);
+
             } else {
                 enemy3HealthBar.setValue(combatEncounter.enemy3.hp);
                 enemy3Shield.setText(String.format("%d", combatEncounter.targetID.get(3).shield));
@@ -953,5 +966,6 @@ public class CombatUI {
     void gameOver() {
         window.dispose();
         GameOverScreen gameOverScreen = new GameOverScreen();
+
     }
 }

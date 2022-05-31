@@ -18,7 +18,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.awt.Color;
 
@@ -36,17 +35,23 @@ public class MapMover extends JPanel implements ActionListener {
     MapData mapData;
     MapGraph currentArea;
     int currentAreaID = 1;
+    boolean isLastArea = false;
 
-    final ImageIcon PLAYER_ICON = new ImageIcon("GameFiles\\playerPortrait.png");
+    final ImageIcon PLAYER_ICON = new ImageIcon("GameFiles\\UI\\playerPortrait.png");
+    final ImageIcon UP_ARROW = new ImageIcon("GameFiles\\UI\\upbutton.png");
+    final ImageIcon RIGHT_ARROW = new ImageIcon("GameFiles\\UI\\right arrow.png");
 
+    final ImageIcon BUILDING = new ImageIcon("GameFiles\\UI\\building.png");
+
+    private JButton restButton = new JButton();
     private JLabel playerPortrait = new JLabel(PLAYER_ICON);
-    private JLabel playerName = new JLabel();
     private JButton playerStats = new JButton();
     private JButton playerInv = new JButton();
+    private JButton upButton, rightButton;
 
     private HashMap<Integer, MapGraph> areaCodes;
 
-    private MapGraph.MapNode currentLocation;
+    public MapGraph.MapNode currentLocation;
     private MapGraph.MapNode leftNode;
     private MapGraph.MapNode aboveNode;
     private MapGraph.MapNode rightNode;
@@ -65,10 +70,16 @@ public class MapMover extends JPanel implements ActionListener {
     HashMap<Integer, JLabel> nodeLabels;
     HashMap<Integer, MapGraph.MapNode> areaStarts;
 
-    static final private String PREVIOUS = "previous";
     static final private String UP = "up";
     static final private String NEXT = "next";
 
+    /**
+     * Map Movement GUI
+     * 
+     * @param mapData map node info
+     * @param game    gamedriver
+     * @param player  the player object
+     */
     public MapMover(MapData mapData, GameDriver game, Player player) {
         this.player = player;
         this.game = game;
@@ -103,30 +114,30 @@ public class MapMover extends JPanel implements ActionListener {
 
         areaStarts = new HashMap<>() {
             {
-                put(1, mapData.area1.getNode("hospital"));
-                put(2, mapData.area2.getNode("highway"));
-                put(3, mapData.area3.getNode("bridge"));
-                put(4, mapData.area4.getNode("bridge"));
-                put(5, mapData.area5.getNode("street"));
-                put(6, mapData.area6.getNode("bridge"));
+                put(1, mapData.area1.getNode("Hospital"));
+                put(2, mapData.area2.getNode("Highway"));
+                put(3, mapData.area3.getNode("Dirty Road"));
+                put(4, mapData.area4.getNode("Junction"));
+                put(5, mapData.area5.getNode("Elementary School"));
             }
         };
 
         this.currentArea = areaCodes.get(currentAreaID);
-        this.currentLocation = currentArea.getNode("hospital");
+        this.currentLocation = currentArea.getNode(areaStarts.get(currentAreaID).name);
         this.aboveNode = currentArea.getAdjList(currentLocation.name).get(0);
         this.rightNode = currentArea.getAdjList(currentLocation.name).get(1);
 
         createWindow();
     }
 
-    protected JButton makeNavigationButton(String imageName,
+    protected JButton makeNavigationButton(ImageIcon image,
             String actionCommand,
             String toolTipText,
             String altText) {
 
         // Create and initialize the button.
         JButton button = new JButton();
+        button.setIcon(image);
         button.setActionCommand(actionCommand);
         button.setToolTipText(toolTipText);
         button.addActionListener(this);
@@ -137,25 +148,19 @@ public class MapMover extends JPanel implements ActionListener {
     }
 
     protected void addButtons(JToolBar toolBar) {
-        JButton button = null;
 
         // first button
-        button = makeNavigationButton("Back24", PREVIOUS,
-                "Back to previous something-or-other",
-                "Previous");
-        toolBar.add(button);
+        upButton = makeNavigationButton(UP_ARROW, UP,
+                "Move up.",
+                "Up");
+        upButton.setVisible(false);
+        toolBar.add(upButton);
 
         // second button
-        button = makeNavigationButton("Up24", UP,
-                "Up to something-or-other",
-                "Up");
-        toolBar.add(button);
-
-        // third button
-        button = makeNavigationButton("Forward24", NEXT,
-                "Forward to something-or-other",
-                "Next");
-        toolBar.add(button);
+        rightButton = makeNavigationButton(RIGHT_ARROW, NEXT,
+                "Advance forward.",
+                "Forward");
+        toolBar.add(rightButton);
     }
 
     @Override
@@ -164,12 +169,15 @@ public class MapMover extends JPanel implements ActionListener {
         int direction = 0;
 
         // Handle each button.
-        if (PREVIOUS.equals(cmd)) { // first button clicked
-            direction = 0;
-        } else if (UP.equals(cmd)) { // second button clicked
+
+        if (UP.equals(cmd)) { // second button clicked
             direction = 1;
+            updateLocations();
+
         } else if (NEXT.equals(cmd)) { // third button clicked
             direction = 2;
+            updateLocations();
+
         }
 
         moveConfirmation(direction);
@@ -201,8 +209,8 @@ public class MapMover extends JPanel implements ActionListener {
             add(movementButtons, c);
 
             currentLocationPanel = new JPanel();
-            currentLocationPanel.setPreferredSize(new Dimension(100, 100));
-            currentLocationLabel.setText("니가 여기다");
+            currentLocationPanel.setPreferredSize(new Dimension(110, 100));
+            currentLocationPanel.setLayout(new GridBagLayout());
             currentLocationPanel.add(currentLocationLabel);
             c.gridx = 1;
             c.gridy = 1;
@@ -211,8 +219,8 @@ public class MapMover extends JPanel implements ActionListener {
             add(currentLocationPanel, c);
 
             rightLocationPanel = new JPanel();
-            rightLocationPanel.setPreferredSize(new Dimension(100, 100));
-            rightLocationLabel.setText("오른쪽 있는 곳");
+            rightLocationPanel.setPreferredSize(new Dimension(110, 100));
+            rightLocationPanel.setLayout(new GridBagLayout());
             rightLocationPanel.add(rightLocationLabel);
             c.gridx = 2;
             c.gridy = 1;
@@ -221,8 +229,8 @@ public class MapMover extends JPanel implements ActionListener {
             add(rightLocationPanel, c);
 
             leftLocationPanel = new JPanel();
-            leftLocationPanel.setPreferredSize(new Dimension(100, 100));
-            leftLocationLabel.setText("왼쪽 있는 곳");
+            leftLocationPanel.setPreferredSize(new Dimension(110, 100));
+            leftLocationPanel.setLayout(new GridBagLayout());
             leftLocationPanel.add(leftLocationLabel);
             c.gridx = 0;
             c.gridy = 1;
@@ -231,14 +239,15 @@ public class MapMover extends JPanel implements ActionListener {
             add(leftLocationPanel, c);
 
             aboveLocationPanel = new JPanel();
-            aboveLocationPanel.setPreferredSize(new Dimension(100, 100));
-            aboveLocationLabel.setText("위에 있는 곳");
+            aboveLocationPanel.setPreferredSize(new Dimension(110, 100));
+            aboveLocationPanel.setLayout(new GridBagLayout());
             aboveLocationPanel.add(aboveLocationLabel);
             c.gridx = 1;
             c.gridy = 0;
             c.gridheight = 1;
             c.gridwidth = 1;
             add(aboveLocationPanel, c);
+
         }
     }
 
@@ -265,8 +274,9 @@ public class MapMover extends JPanel implements ActionListener {
             playerStats.setText("Show Stats");
             playerStats.addActionListener(a -> {
                 JOptionPane.showMessageDialog(this,
-                        String.format("Perception: %d\n Organization: %d\n Dexterity: %d\n Shooting: %d",
-                                player.perception, player.organization, player.dexterity,
+                        String.format(
+                                "Name: %s\nCurrent HP: %d/100\n\nPerception: %d - Flat increase to max heal\n Organization: %d - Flat increase to inventory space\n Dexterity: %d - Increases action points per turn\n Shooting: %d - Increases final damage of abilities",
+                                player.name, player.hp, player.perception, player.organization, player.dexterity,
                                 player.shooting),
                         "STATS", JOptionPane.PLAIN_MESSAGE);
                 ;
@@ -279,10 +289,40 @@ public class MapMover extends JPanel implements ActionListener {
             c.gridy = 2;
             add(playerStats, c);
 
+            restButton.setText("Rest");
+            restButton.addActionListener(a -> {
+                int choice = JOptionPane.showConfirmDialog(this,
+                        String.format(
+                                "Current HP: %d/100\n\nAre you sure you want to sleep?\nYou will heal 20%% of your max health and start with 50 shield in the next area with combat.\n (WARNING: Enemies may stumble upon you resting)",
+                                player.hp),
+                        "Rest", JOptionPane.YES_NO_OPTION);
+                if (choice == 0) {
+                    if (player.hp >= 100) {
+                        JOptionPane.showMessageDialog(this,
+                                "You have no time to rest, you must move on. (HP already at max.)", "Move on Courier",
+                                JOptionPane.OK_OPTION);
+                    } else {
+                        game.playerRest(window);
+                    }
+                }
+
+            });
+            c.gridx = 1;
+            c.gridy = 2;
+            c.insets = new Insets(10, 10, 10, 10);
+            add(restButton, c);
+
             playerInv.setText("Show Inventory");
-            playerInv.addActionListener(b -> {
+            playerInv.addActionListener(a -> {
                 String x = showInventory();
-                JOptionPane.showMessageDialog(this, x, "INVENTORY ITEMS", JOptionPane.PLAIN_MESSAGE);
+                int choice = JOptionPane.showOptionDialog(this, x, "INVENTORY ITEMS", JOptionPane.YES_NO_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE, null,
+                        new Object[] { "Back", "Swap weapon", "Discard Weapon" }, "Back");
+                if (choice == 1) {
+                    game.equipWeapon();
+                } else if (choice == 2) {
+                    GameDriver.player.removeFromInventory();
+                }
             });
             playerInv.setToolTipText("Shows the contents of the player's inventory.");
             c.insets = new Insets(10, 0, 10, 0);
@@ -292,18 +332,10 @@ public class MapMover extends JPanel implements ActionListener {
             c.gridy = 2;
             add(playerInv, c);
 
-            playerName.setText(player.name);
-            playerName.setForeground(WHITE);
-            c.insets = new Insets(10, 40, 10, 40);
-            c.gridheight = 1;
-            c.gridwidth = 1;
-            c.gridx = 1;
-            c.gridy = 2;
-            add(playerName, c);
         }
 
         private String showInventory() {
-            String inventoryItems = "";
+            String inventoryItems = "PACKAGE: Platinum USB \n\n-------------------------------\n";
             for (int i = 0; i < player.inventory.size(); i++) {
                 if (player.inventory.get(i).gunName == player.gun.gunName) {
                     inventoryItems += "EQUIPPED: " + (player.inventory.get(i).gunName) + "\n";
@@ -324,6 +356,7 @@ public class MapMover extends JPanel implements ActionListener {
      */
     private void moveTo(int direction) {
 
+        // Updates and changes currentLocation depending on the button pressed.
         if (currentArea.getAdjList(currentLocation.name).size() == 2) {
             if (direction == 2) {
                 direction = 1;
@@ -335,20 +368,31 @@ public class MapMover extends JPanel implements ActionListener {
             currentLocation = currentArea.getAdjList(currentLocation.name).get(direction);
         }
 
+        // Checks if the area is the last area of the game
+        if (currentAreaID == 5) {
+            if (currentArea.getNode("Bridge").name == currentLocation.name) {
+                isLastArea = true;
+            }
+        }
+
+        // Creates a combat encouter if the enemy amount of the node is > 0
+        // Also checks if area is the last area.
+        if (currentArea.getNode(currentLocation.name).data.enemyAmount > 0) {
+            game.createCombatEncounter(currentArea.getNode(
+                    currentLocation.name).data.tier,
+                    currentArea.getNode(currentLocation.name).data.enemyAmount, window, player, game, isLastArea);
+        }
+        // Updates current area when the last node of an area is reached
         if (currentArea.getNode(currentLocation.name).data.tier == 5) {
-            System.out.println("What is up mfs");
             currentAreaID++;
             currentArea = areaCodes.get(currentAreaID);
             currentLocation = areaStarts.get(currentAreaID);
         }
 
-        // Creates an encounter if there are enemies in the area
-        if (currentArea.getNode(currentLocation.name).data.enemyAmount > 0) {
-            game.createCombatEncounter(currentArea.getNode(
-                    currentLocation.name).data.tier,
-                    currentArea.getNode(currentLocation.name).data.enemyAmount, window, player, game);
+        if (!isLastArea) {
+            updateLocations();
         }
-        updateLocations();
+
     }
 
     /**
@@ -380,15 +424,22 @@ public class MapMover extends JPanel implements ActionListener {
             case (2):
                 rightLocationLabel.setText(String.format("%s", currentArea.getAdjList(currentLocationName).get(1)));
                 leftLocationLabel.setText(String.format("%s", currentArea.getAdjList(currentLocationName).get(0)));
+
                 aboveLocationLabel.setVisible(false);
                 aboveLocationPanel.setVisible(false);
+                upButton.setEnabled(false);
+                upButton.setVisible(false);
                 break;
             case (3):
                 aboveLocationLabel.setText(String.format("%s", currentArea.getAdjList(currentLocationName).get(1)));
+
                 aboveLocationLabel.setVisible(true);
                 aboveLocationPanel.setVisible(true);
                 rightLocationLabel.setText(String.format("%s", currentArea.getAdjList(currentLocationName).get(2)));
                 leftLocationLabel.setText(String.format("%s", currentArea.getAdjList(currentLocationName).get(0)));
+
+                upButton.setEnabled(true);
+                upButton.setVisible(true);
                 break;
         }
 
@@ -404,6 +455,7 @@ public class MapMover extends JPanel implements ActionListener {
         PlayerInfo playerInfo = new PlayerInfo(player);
 
         window = new JFrame();
+        window.setTitle("The Courier");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setBackground(WHITE);
         window.setLayout(new GridLayout(1, 0, 5, 0));

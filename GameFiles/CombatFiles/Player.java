@@ -1,7 +1,6 @@
 package CombatFiles;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -20,7 +19,9 @@ public class Player {
 	public Armour armour;
 	public Gun gun;
 
-	private String[] ranks = { "Private", "Captain", "First Sergeant", "Lieutenant" };
+	public Boolean isRested = false;
+
+	private String[] ranks = { "Private", "Captain", "Sergeant", "Lieutenant" };
 	private String[] lastNames = { "Choi", "Lee", "Park", "Kim", "Go", "Jo", "Oh", "Jeong", "Lim", "Son" };
 
 	/**
@@ -46,7 +47,11 @@ public class Player {
 		this.shield = 0;
 
 		this.inventory = new ArrayList<>();
-		this.name = String.format("%s %s", (ranks[r.nextInt(ranks.length)]), (lastNames[r.nextInt(lastNames.length)]));
+		if (name == null) {
+			this.name = String.format("%s %s", (ranks[r.nextInt(ranks.length)]), lastNames[r.nextInt(ranks.length)]);
+		} else {
+			this.name = String.format("%s %s", (ranks[r.nextInt(ranks.length)]), name);
+		}
 
 	}
 
@@ -61,16 +66,42 @@ public class Player {
 		} else {
 			JOptionPane.showConfirmDialog(window,
 					"Inventory is full! Cannot add another item.\n Empty an inventory slot before adding a new item.",
-					"Inventory is full", JOptionPane.YES_OPTION);
+					"Inventory is full", JOptionPane.OK_OPTION);
 		}
 	}
 
 	/**
 	 * A method to remove an item from the inventory *NOT REVERSIBLE*
 	 * 
-	 * @param inventoryID the ID of the item that will be removed.
+	 * 
 	 */
-	public void removeFromInventory(int inventoryID) {
+	public void removeFromInventory() {
+		if (inventory.size() == 1) {
+			JOptionPane.showMessageDialog(null, "You only have 1 item in your inventory, you can't discard.",
+					"Discard Weapon Error", JOptionPane.OK_OPTION);
+		} else {
+			String inv = "";
+			for (int i = 0; i < inventory.size(); i++) {
+				inv += String.format("Inventory Slot %d: %s\n", i, inventory.get(i).gunName);
+			}
 
+			String choice = JOptionPane.showInputDialog(null, inv, "Discard Weapon", JOptionPane.QUESTION_MESSAGE);
+			try {
+				if (Integer.parseInt(choice) > inventory.size()) {
+					JOptionPane.showMessageDialog(null, "Invalid Inventory Slot Number", "Discard Error",
+							JOptionPane.OK_OPTION);
+				} else {
+
+					int slot = Integer.parseInt(choice);
+
+					inventory.remove(slot);
+
+					JOptionPane.showMessageDialog(null,
+							String.format("Successfully removed %s", gun.gunName),
+							"Discard Weapon", JOptionPane.OK_OPTION);
+				}
+			} catch (Exception e) {
+			}
+		}
 	}
 }

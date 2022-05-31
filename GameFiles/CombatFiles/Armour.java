@@ -5,7 +5,7 @@ package CombatFiles;
  */
 public class Armour {
 
-    int armourClass, armourAmount;
+    public int armourClass, armourAmount;
 
     /**
      * Constructor for the Armour class which holds values that emulate a piece of
