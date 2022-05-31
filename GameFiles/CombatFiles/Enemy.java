@@ -5,10 +5,16 @@ import java.util.Random;
 import java.util.Queue;
 import java.util.LinkedList;
 
+/**
+ * The enemy class
+ */
 public class Enemy {
 
 	Random r = new Random();
 
+	/**
+	 * Health states of the enemy that determines the chances of them attacking are
+	 */
 	public enum healthState {
 
 		HEALTHY {
@@ -72,6 +78,9 @@ public class Enemy {
 		abstract int chanceToAttack();
 	}
 
+	/**
+	 * The action that the enemy will do once the player's turn is ended.
+	 */
 	public enum actionState {
 		ATTACK,
 		HEALING,
@@ -156,6 +165,7 @@ public class Enemy {
 		return healthState.DEAD;
 	}
 
+	// Enemy intention queues
 	Queue<Integer> attackTurn;
 	Queue<Integer> healTurn;
 	Queue<Integer> shieldTurn;
@@ -218,7 +228,7 @@ public class Enemy {
 	}
 
 	/**
-	 * Enemy attack method, called when enemies need to attack the player.
+	 * Queues an enemy attack into the enemy attack queue
 	 */
 	private void attack() {
 
@@ -227,6 +237,9 @@ public class Enemy {
 
 	}
 
+	/**
+	 * Queues an enemy heal into their heal queue
+	 */
 	private void heal() {
 
 		// Rolls for next heal
@@ -234,6 +247,9 @@ public class Enemy {
 
 	}
 
+	/**
+	 * Queues a shield roll into their shield queue
+	 */
 	private void shield() {
 
 		// Rolls for the next shield.
@@ -255,6 +271,9 @@ public class Enemy {
 		intention = nextTurnIntention.poll();
 	}
 
+	/**
+	 * Randomly rolls actions between 1 - 3
+	 */
 	void rollActions() {
 		actions = r.nextInt(3) + 1;
 	}

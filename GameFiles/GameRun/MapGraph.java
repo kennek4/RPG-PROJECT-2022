@@ -128,6 +128,13 @@ public class MapGraph {
         }
     }
 
+    /**
+     * Creates the Nodes Data
+     * 
+     * @param areaTier    the tier of enemy in the area
+     * @param enemyAmount the amount of enemies from a range of 0 - 3
+     * @return a NodeData object
+     */
     public NodeData newData(int areaTier, int enemyAmount) {
         return (new NodeData(areaTier, enemyAmount));
     }

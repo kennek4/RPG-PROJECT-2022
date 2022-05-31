@@ -16,8 +16,12 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Color;
 
+/**
+ * The class for the Game Over Screen
+ */
 public class GameOverScreen {
 
+    // Colours
     final Color WHITE = new Color(240, 246, 240);
     final Color BLACK = new Color(34, 35, 35);
 
@@ -29,6 +33,9 @@ public class GameOverScreen {
     Scanner reader;
     BufferedImage myPicture;
 
+    /**
+     * Creates the Game Over Screen
+     */
     public GameOverScreen() {
 
         window = new JFrame("GAME OVER");

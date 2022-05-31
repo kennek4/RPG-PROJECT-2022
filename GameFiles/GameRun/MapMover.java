@@ -21,6 +21,9 @@ import java.awt.Insets;
 import java.util.HashMap;
 import java.awt.Color;
 
+/**
+ * The class that creates the main game window
+ */
 public class MapMover extends JPanel implements ActionListener {
 
     JFrame window;
@@ -84,7 +87,7 @@ public class MapMover extends JPanel implements ActionListener {
         this.player = player;
         this.game = game;
         this.mapData = mapData;
-        // System.out.println(currentLocation + "1");
+
         nodeID = new HashMap<>() {
             {
                 put(0, leftNode);
@@ -334,6 +337,11 @@ public class MapMover extends JPanel implements ActionListener {
 
         }
 
+        /**
+         * Returns a string representing the user's inventory of guns.
+         * 
+         * @return the player's inventory
+         */
         private String showInventory() {
             String inventoryItems = "PACKAGE: Platinum USB \n\n-------------------------------\n";
             for (int i = 0; i < player.inventory.size(); i++) {

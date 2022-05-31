@@ -1,5 +1,8 @@
 package GameRun;
 
+/**
+ * The class that holds all necessary information on map nodes
+ */
 public class MapData {
 
     MapGraph area1;
@@ -9,6 +12,9 @@ public class MapData {
     MapGraph area5;
     MapGraph area6;
 
+    /**
+     * Creation of all nodes within the game.
+     */
     public MapData() {
 
         area1 = new MapGraph();
@@ -256,6 +262,5 @@ public class MapData {
         area6.addEdge("road", "butcherShop");
         area6.addEdge("butcherShop", "hospital");
 
-        System.out.println(area6.getAdjList("pharmacy"));
     }
 }

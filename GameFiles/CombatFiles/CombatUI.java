@@ -833,8 +833,22 @@ public class CombatUI {
         }
     }
 
+    /**
+     * Returns a message window that gives an overview of the damage dealt by an
+     * ability.
+     * 
+     * @param enemyID           the ID of the enemy
+     * @param critBullets       the amount of bullets that crit
+     * @param normalBullets     the amount of bullets that didn't crit
+     * @param damageAmount      the total damage dealt, includes crit damage
+     * @param critDamageDealt   the total crit damage dealt by the crit bullets
+     * @param playerExtraDamage the extra player damage (the extra damage from the
+     *                          player's shooting skill)
+     * @param playerShooting    the player's shooting skill
+     */
     public void damageOverView(int enemyID, int critBullets, int normalBullets, int damageAmount, int critDamageDealt,
             int playerExtraDamage, int playerShooting) {
+
         if (critDamageDealt > 0) {
             JOptionPane.showMessageDialog(window,
                     String.format(

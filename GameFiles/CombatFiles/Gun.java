@@ -31,6 +31,7 @@ public class Gun {
 
         this.gunName = gunName;
 
+        // Putting the abiities into a HashMap that contains an ID for each
         abilityID = new HashMap<>() {
             {
                 put(0, a1);
